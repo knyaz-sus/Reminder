@@ -20,11 +20,11 @@ export default function ProtectedRoute({
   }
 
   if (authRequired && !user) {
-    return <Navigate to={redirectPath} />;
+    return <Navigate to={redirectPath} replace />;
   }
 
   if (!authRequired && user) {
-    return <Navigate to={redirectPath} />;
+    return <Navigate to={redirectPath} replace />;
   }
 
   return <>{children}</>;

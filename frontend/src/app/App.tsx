@@ -1,9 +1,12 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
-import { AuthPage } from "./pages/AuthPage";
+import { AuthLayout } from "./pages/AuthLayout";
 import { AppTodayPage } from "./pages/AppTodayPage";
 import { AppLayout } from "./pages/AppLayout";
 import ProtectedRoute from "../features/auth/components/ProtectedRoute";
+import { LoginForm } from "../features/auth/components/LoginForm";
+import { SignupForm } from "../features/auth/components/SingupForm";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 export function App() {
   return (
@@ -13,20 +16,28 @@ export function App() {
         path="/auth"
         element={
           <ProtectedRoute redirectPath="/app/today" authRequired={false}>
-            <AuthPage />
+            <AuthLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="/auth/login" element={<LoginForm />} />
+        <Route path="/auth/signup" element={<SignupForm />} />
+        <Route index element={<Navigate to="login" replace />} />
+        <Route path="/auth/*" element={<Navigate to="login" replace />} />
+      </Route>
       <Route
         path="/app"
         element={
-          <ProtectedRoute redirectPath="/auth" authRequired={true}>
+          <ProtectedRoute redirectPath="/auth/login" authRequired={true}>
             <AppLayout />
           </ProtectedRoute>
         }
       >
         <Route path="/app/today" element={<AppTodayPage />} />
+        <Route index element={<Navigate to="today" replace />} />
+        <Route path="/app/*" element={<Navigate to="today" replace />} />
       </Route>
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

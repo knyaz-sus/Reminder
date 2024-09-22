@@ -15,7 +15,8 @@ router.post("/change-username", async (req, res) => {
       .eq("id", id);
 
     if (error) {
-      throw error;
+      console.log(error.message);
+      return null;
     }
 
     res.status(200).json({ message: "Username updated successfully", data });

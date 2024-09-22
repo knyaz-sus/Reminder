@@ -1,10 +1,17 @@
 import { ReactNode } from "react";
 
 interface ButtonProps {
-  onClick?: () => void | Promise<unknown>;
+  handleClick?: () => void | Promise<unknown>;
   children: ReactNode | string;
 }
 
-export function Button({ onClick, children }: ButtonProps) {
-  return <button onClick={onClick}>{children}</button>;
+export function Button({ handleClick, children }: ButtonProps) {
+  return (
+    <button
+      className="text-button bg-button rounded-lg p-2"
+      onClick={handleClick}
+    >
+      {children}
+    </button>
+  );
 }

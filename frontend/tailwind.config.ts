@@ -16,6 +16,10 @@ const config: Config = {
         highlight: "var(--color-highlight-content)",
         button: "var(--color-button-text)",
       },
+      borderColor: {
+        highlight: "var(--color-highlight-border)",
+        base: "var(--color-base-border)",
+      },
     },
   },
   plugins: [],

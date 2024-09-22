@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import { useAuth } from "../../features/auth/hooks/useAuth";
@@ -11,7 +11,7 @@ import { signOut } from "../../features/auth/services/signOut";
 export function AppTodayPage() {
   const { user, isLoading } = useAuth();
   const [newName, setNewName] = useState("");
-
+  const id = useId();
   const {
     data: userRow,
     refetch: refetchRow,
@@ -34,9 +34,15 @@ export function AppTodayPage() {
       ) : (
         <h2>Loading...</h2>
       )}
-      <Input value={newName} setValue={setNewName} />
-      <Button onClick={changeNameHandler}>change</Button>
-      <Button onClick={signOut}>sign out</Button>
+      <Input
+        value={newName}
+        setValue={setNewName}
+        placeholder=""
+        name={`${id}`}
+        id={`${id}`}
+      />
+      <Button handleClick={changeNameHandler}>change</Button>
+      <Button handleClick={signOut}>sign out</Button>
     </div>
   );
 }

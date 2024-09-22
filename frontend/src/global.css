@@ -6,18 +6,21 @@
   :root {
     --color-base-content: #333333;
     --color-base-background: #ffffff;
-    --color-highlight-content: #000000;
-    --color-button-background: #000000;
+    --color-highlight-content: rgb(23, 23, 23);
+    --color-button-background: rgb(23, 23, 23);
     --color-button-text: #ffffff;
-    /* add contrast borders */
+    --color-base-border: #e0e0e0;
+    --color-highlight-border: #333333;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --color-base-content: #e0e0e0;
-      --color-base-background: #000000;
+      --color-base-background: rgb(23, 23, 23);
       --color-highlight-content: #ffffff;
       --color-button-background: #ffffff;
-      --color-button-text: #000000;
+      --color-button-text: rgb(0, 0, 0);
+      --color-base-border: #333333;
+      --color-highlight-border: #e0e0e0;
     }
   }
   body {
@@ -33,7 +36,7 @@
   h4,
   h5,
   h6 {
-    @apply tracking-tight text-3xl text-highlight font-bold;
+    @apply tracking-tight text-2xl text-highlight font-bold;
   }
 }
 
