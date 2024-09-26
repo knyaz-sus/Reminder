@@ -1,60 +1,49 @@
-import { FormEvent, useId, useState } from "react";
-import { Input } from "../../../components/Input";
+import { FormEvent } from "react";
 import { Button } from "../../../components/Button";
+import { singUpSchema } from "../utils/validate";
+import { useValidateForm } from "../hooks/useValidateForm";
+import { FormField } from "./FormField";
 import { signUpWithPassword } from "../services/signUpWithPassword";
 
 export function SignupForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const id = useId();
-  const handleSignUp = () => signUpWithPassword(name, email, password);
-  const preventSubmit = (e: FormEvent<HTMLFormElement>) => e.preventDefault();
+  const { formData, errors, isFormValid, handleChange, handleSubmit } =
+    useValidateForm(singUpSchema, { email: "", password: "", name: "" });
+  const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
+    handleSubmit(e);
+    if (isFormValid) {
+      signUpWithPassword(formData.name, formData.email, formData.password);
+    }
+  };
+  console.log(`f${formData.name}a`, errors.name);
   return (
-    <form
-      className="flex flex-col gap-3 rounded-lg border-base border w-full max-w-sm p-6"
-      onSubmit={preventSubmit}
-      id={`${id}-signin`}
-      name={`${id}-signin`}
-    >
-      <h1 className="mb-2">Sign up</h1>
-      <div>
-        <label className="text-sm p-1" htmlFor={`${id}-username`}>
-          Username
-        </label>
-        <Input
-          value={name}
-          setValue={setName}
-          placeholder="Enter username"
-          id={`${id}-username`}
-          name={`${id}-username`}
+    <div className="rounded-lg border-base border w-full max-w-sm p-6">
+      <form
+        className="flex flex-col gap-3 mb-2"
+        onSubmit={handleSignIn}
+        id="signup-form"
+        name="signup-form"
+      >
+        <h1 className="mb-2">Sign up</h1>
+        <FormField
+          value={formData.name}
+          handleChange={handleChange}
+          errors={errors.name}
+          name="name"
         />
-      </div>
-      <div>
-        <label className="text-sm p-1" htmlFor={`${id}-email`}>
-          Email
-        </label>
-        <Input
-          value={email}
-          setValue={setEmail}
-          placeholder="Enter email"
-          id={`${id}-email`}
-          name={`${id}-email`}
+        <FormField
+          value={formData.email}
+          handleChange={handleChange}
+          errors={errors.email}
+          name="email"
         />
-      </div>
-      <div className="mb-2">
-        <label className="text-sm p-1" htmlFor={`${id}-password`}>
-          Password
-        </label>
-        <Input
-          value={password}
-          setValue={setPassword}
-          placeholder="Enter password"
-          id={`${id}-password`}
-          name={`${id}-password`}
+        <FormField
+          value={formData.password}
+          handleChange={handleChange}
+          errors={errors.password}
+          name="password"
         />
-      </div>
-      <Button handleClick={handleSignUp}>Sign up</Button>
-    </form>
+        <Button type="submit">Sign up</Button>
+      </form>
+    </div>
   );
 }

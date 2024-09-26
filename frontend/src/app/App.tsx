@@ -4,7 +4,7 @@ import { AuthLayout } from "./pages/AuthLayout";
 import { AppTodayPage } from "./pages/AppTodayPage";
 import { AppLayout } from "./pages/AppLayout";
 import ProtectedRoute from "../features/auth/components/ProtectedRoute";
-import { LoginForm } from "../features/auth/components/LoginForm";
+import { LoginForm } from "../features/auth/components/SignInForm";
 import { SignupForm } from "../features/auth/components/SingupForm";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
