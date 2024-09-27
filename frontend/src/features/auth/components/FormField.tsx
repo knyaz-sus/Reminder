@@ -1,34 +1,34 @@
-import { ChangeEvent } from "react";
-import { Input } from "../../../components/Input";
+import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 import { ErrorSpan } from "../../../components/ErrorSpan";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 
-interface FormFieldProps {
-  value: string;
-  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  errors?: string[];
-  name: string;
+interface FormFieldProps<T extends FieldValues> {
+  name: Path<T>;
+  register: UseFormRegister<T>;
+  error?: string;
+  type?: "text" | "password";
 }
 
-export function FormField({
-  value,
-  handleChange,
-  errors,
+export function FormField<T extends FieldValues>({
   name,
-}: FormFieldProps) {
+  error,
+  register,
+
+  type = "text",
+}: FormFieldProps<T>) {
   return (
     <div>
-      <label className="text-sm p-1" htmlFor={`${name}`}>
+      <label className="text-sm p-1" htmlFor={name}>
         {capitalizeFirstLetter(name)}
       </label>
-      <Input
-        value={value}
-        handleChange={handleChange}
-        placeholder={`Enter ${name}`}
-        id={`${name}`}
-        name={`${name}`}
+      <input
+        {...register(name)}
+        type={type}
+        placeholder={`Enter your ${name}`}
+        id={name}
+        autoComplete={name}
       />
-      {errors && <ErrorSpan>{errors.at(-1)}</ErrorSpan>}
+      {error && <ErrorSpan>{error}</ErrorSpan>}
     </div>
   );
 }

@@ -1,56 +1,58 @@
-import { FormEvent } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "../../../components/Button";
-import { signIn } from "../services/signIn";
-import { signInWithGithub } from "../services/signInWithGithub";
 import GithubIconDark from "../../../assets/icons/GithubIconDark.svg";
-import { IconButton } from "../../../components/IconButton";
-import { signInSchema } from "../utils/validate";
-import { useValidateForm } from "../hooks/useValidateForm";
+import { signInSchema, SingInSchema } from "../utils/validate";
 import { FormField } from "./FormField";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "../services/signIn";
+import { IconButton } from "../../../components/IconButton";
+import { signInWithGithub } from "../services/signInWithGithub";
+import { Link } from "react-router-dom";
 
-export function LoginForm() {
-  const { formData, errors, isFormValid, handleChange, handleSubmit } =
-    useValidateForm(signInSchema, { email: "", password: "" });
-  const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
-    handleSubmit(e);
-    if (isFormValid) {
-      signIn(formData.email, formData.password);
-    }
+export function SignInForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SingInSchema>({
+    resolver: zodResolver(signInSchema),
+  });
+  const handleSignIn: SubmitHandler<SingInSchema> = (formData) => {
+    signIn(formData.email, formData.password);
   };
   return (
     <div className="rounded-lg border-base border w-full max-w-sm p-6">
       <form
         className="flex flex-col gap-3 mb-2"
-        onSubmit={handleSignIn}
-        id="login-form"
-        name="login-form"
+        onSubmit={handleSubmit(handleSignIn)}
+        id="signup-form"
+        name="signup-form"
       >
-        <h1 className="mb-2">Log in</h1>
+        <h1 className="mb-2">Sign in</h1>
         <IconButton Icon={GithubIconDark} handleClick={signInWithGithub}>
-          Sign up with Github
+          Sign in with github
         </IconButton>
-        <FormField
-          value={formData.email}
-          handleChange={handleChange}
-          errors={errors.email}
-          name="email"
-        />
-        <FormField
-          value={formData.password}
-          handleChange={handleChange}
-          errors={errors.password}
-          name="password"
-        />
+        <div className="flex flex-col gap-3 mb-2">
+          <FormField
+            register={register}
+            error={errors.email?.message}
+            name="email"
+          />
+          <FormField
+            register={register}
+            error={errors.password?.message}
+            name="password"
+            type="password"
+          />
+        </div>
         <Button type="submit">Sign in with password</Button>
       </form>
-      <div className="flex justify-center text-sm ">
-        <span>
-          Are you new to my app? Feel free to{" "}
-          <Link className="underline" to={"/auth/signup"}>
-            sing up
-          </Link>
-        </span>
+
+      <div className="text-sm text-center">
+        New to Reminder?{" "}
+        <Link className="underline" to="/auth/signup">
+          Sign up
+        </Link>
       </div>
     </div>
   );

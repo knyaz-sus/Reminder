@@ -38,6 +38,9 @@
   h6 {
     @apply tracking-tight text-2xl text-highlight font-bold;
   }
+  input {
+    @apply rounded-lg border-base border bg-inherit p-2 w-full max-w-sm;
+  }
 }
 
 @font-face {

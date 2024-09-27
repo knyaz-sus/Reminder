@@ -1,6 +1,5 @@
 import { useId, useState } from "react";
 import { Button } from "../../components/Button";
-import { Input } from "../../components/Input";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { changeUserName } from "../../services/changeUserName";
 import { useQuery } from "@tanstack/react-query";
@@ -34,9 +33,9 @@ export function AppTodayPage() {
       ) : (
         <h2>Loading...</h2>
       )}
-      <Input
+      <input
         value={newName}
-        setValue={setNewName}
+        onChange={(e) => setNewName(e.target.value)}
         placeholder=""
         name={`${id}`}
         id={`${id}`}

@@ -1,47 +1,48 @@
-import { FormEvent } from "react";
 import { Button } from "../../../components/Button";
-import { singUpSchema } from "../utils/validate";
-import { useValidateForm } from "../hooks/useValidateForm";
+import { SingUpSchema, singUpSchema } from "../utils/validate";
 import { FormField } from "./FormField";
 import { signUpWithPassword } from "../services/signUpWithPassword";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-export function SignupForm() {
-  const { formData, errors, isFormValid, handleChange, handleSubmit } =
-    useValidateForm(singUpSchema, { email: "", password: "", name: "" });
-  const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
-    handleSubmit(e);
-    if (isFormValid) {
-      signUpWithPassword(formData.name, formData.email, formData.password);
-    }
+export function SignUpForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SingUpSchema>({
+    resolver: zodResolver(singUpSchema),
+  });
+  const handleSignIn: SubmitHandler<SingUpSchema> = (formData) => {
+    signUpWithPassword(formData.name, formData.email, formData.password);
   };
-  console.log(`f${formData.name}a`, errors.name);
   return (
     <div className="rounded-lg border-base border w-full max-w-sm p-6">
       <form
-        className="flex flex-col gap-3 mb-2"
-        onSubmit={handleSignIn}
+        className="flex flex-col gap-3"
+        onSubmit={handleSubmit(handleSignIn)}
         id="signup-form"
         name="signup-form"
       >
         <h1 className="mb-2">Sign up</h1>
-        <FormField
-          value={formData.name}
-          handleChange={handleChange}
-          errors={errors.name}
-          name="name"
-        />
-        <FormField
-          value={formData.email}
-          handleChange={handleChange}
-          errors={errors.email}
-          name="email"
-        />
-        <FormField
-          value={formData.password}
-          handleChange={handleChange}
-          errors={errors.password}
-          name="password"
-        />
+        <div className="flex flex-col gap-3 mb-2">
+          <FormField
+            register={register}
+            error={errors.name?.message}
+            name="name"
+          />
+          <FormField
+            register={register}
+            error={errors.email?.message}
+            name="email"
+          />
+          <FormField
+            register={register}
+            error={errors.password?.message}
+            name="password"
+            type="password"
+          />
+        </div>
         <Button type="submit">Sign up</Button>
       </form>
     </div>

@@ -4,8 +4,8 @@ import { AuthLayout } from "./pages/AuthLayout";
 import { AppTodayPage } from "./pages/AppTodayPage";
 import { AppLayout } from "./pages/AppLayout";
 import ProtectedRoute from "../features/auth/components/ProtectedRoute";
-import { LoginForm } from "../features/auth/components/SignInForm";
-import { SignupForm } from "../features/auth/components/SingupForm";
+import { SignInForm } from "../features/auth/components/SignInForm";
+import { SignUpForm } from "../features/auth/components/SingUpForm";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 export function App() {
@@ -20,8 +20,8 @@ export function App() {
           </ProtectedRoute>
         }
       >
-        <Route path="/auth/login" element={<LoginForm />} />
-        <Route path="/auth/signup" element={<SignupForm />} />
+        <Route path="/auth/login" element={<SignInForm />} />
+        <Route path="/auth/signup" element={<SignUpForm />} />
         <Route index element={<Navigate to="login" replace />} />
         <Route path="/auth/*" element={<Navigate to="login" replace />} />
       </Route>
