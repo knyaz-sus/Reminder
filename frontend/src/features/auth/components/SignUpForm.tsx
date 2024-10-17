@@ -45,6 +45,7 @@ export function SignUpForm() {
         </div>
         <Button type="submit">Sign up</Button>
       </form>
+      <div>Auth content</div>
     </div>
   );
 }

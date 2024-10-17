@@ -5,7 +5,7 @@ import { AppTodayPage } from "./pages/AppTodayPage";
 import { AppLayout } from "./pages/AppLayout";
 import ProtectedRoute from "../features/auth/components/ProtectedRoute";
 import { SignInForm } from "../features/auth/components/SignInForm";
-import { SignUpForm } from "../features/auth/components/SingUpForm";
+import { SignUpForm } from "../features/auth/components/SignUpForm";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 export function App() {

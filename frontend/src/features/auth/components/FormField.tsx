@@ -13,7 +13,6 @@ export function FormField<T extends FieldValues>({
   name,
   error,
   register,
-
   type = "text",
 }: FormFieldProps<T>) {
   return (
