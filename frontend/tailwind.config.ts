@@ -10,6 +10,8 @@ const config: Config = {
       backgroundColor: {
         base: "var(--color-base-background)",
         button: "var(--color-button-background)",
+        leftbar: "var(--color-left-bar-background)",
+        transparent: "var(--color-transparent)",
       },
       textColor: {
         base: "var(--color-base-content)",

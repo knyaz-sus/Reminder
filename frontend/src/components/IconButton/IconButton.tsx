@@ -1,20 +1,17 @@
-import { ReactNode } from "react";
+import { IconType } from "react-icons";
 
 interface IconButtonProps {
-  Icon: string;
+  Icon: IconType;
   handleClick: () => void | Promise<unknown>;
-  children: ReactNode | string;
 }
-
-export function IconButton({ Icon, handleClick, children }: IconButtonProps) {
+export function IconButton({ Icon, handleClick }: IconButtonProps) {
   return (
     <button
-      className="flex items-center text-button bg-button rounded-lg p-2"
+      className="flex items-center justify-center rounded-md p-1 hover:bg-transparent"
       onClick={handleClick}
       type="button"
     >
-      <img className="w-5 h-5" src={Icon} alt="Github" />
-      <span className="flex-auto">{children}</span>
+      <Icon size={22} />
     </button>
   );
 }

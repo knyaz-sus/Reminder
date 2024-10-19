@@ -11,6 +11,7 @@
     --color-button-text: #ffffff;
     --color-base-border: #e0e0e0;
     --color-highlight-border: #333333;
+    --color-left-bar-background: #b0b0b0;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -21,6 +22,8 @@
       --color-button-text: rgb(0, 0, 0);
       --color-base-border: #333333;
       --color-highlight-border: #e0e0e0;
+      --color-left-bar-background: #262626;
+      --color-transparent: rgb(50, 47, 42);
     }
   }
   body {
@@ -39,7 +42,7 @@
     @apply tracking-tight text-2xl text-highlight font-bold;
   }
   input {
-    @apply rounded-lg border-base border bg-inherit p-2 w-full max-w-sm;
+    @apply rounded-md border-base border bg-inherit p-2 w-full max-w-sm;
   }
 }
 

@@ -1,15 +1,15 @@
 import { ReactNode } from "react";
 
-interface ButtonProps {
+interface TextButtonProps {
   handleClick?: () => void | Promise<unknown>;
   children: ReactNode | string;
   type?: "button" | "submit" | "reset";
 }
 
-export function Button({ handleClick, children, type }: ButtonProps) {
+export function TextButton({ handleClick, children, type }: TextButtonProps) {
   return (
     <button
-      className="text-button bg-button rounded-lg p-2"
+      className="text-button bg-button rounded-md pt-1 pl-2 pb-1 pr-2"
       onClick={handleClick}
       type={type}
     >

@@ -1,4 +1,4 @@
-import { Button } from "../../../components/Button";
+import { TextButton } from "../../../components/TextButton";
 import { SingUpSchema, singUpSchema } from "../utils/validate";
 import { FormField } from "./FormField";
 import { signUpWithPassword } from "../services/signUpWithPassword";
@@ -17,7 +17,7 @@ export function SignUpForm() {
     signUpWithPassword(formData.name, formData.email, formData.password);
   };
   return (
-    <div className="rounded-lg border-base border w-full max-w-sm p-6">
+    <div className="rounded-md border-base border w-full max-w-sm p-6">
       <form
         className="flex flex-col gap-3"
         onSubmit={handleSubmit(handleSignIn)}
@@ -43,7 +43,7 @@ export function SignUpForm() {
             type="password"
           />
         </div>
-        <Button type="submit">Sign up</Button>
+        <TextButton type="submit">Sign up</TextButton>
       </form>
       <div>Auth content</div>
     </div>

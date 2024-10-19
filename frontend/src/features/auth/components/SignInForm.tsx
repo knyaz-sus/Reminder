@@ -1,11 +1,11 @@
-import { Button } from "../../../components/Button";
+import { TextButton } from "../../../components/TextButton";
 import GithubIconDark from "../../../assets/icons/GithubIconDark.svg";
 import { signInSchema, SingInSchema } from "../utils/validate";
 import { FormField } from "./FormField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "../services/signIn";
-import { IconButton } from "../../../components/IconButton";
+import { IconTextButton } from "../../../components/IconTextButton";
 import { signInWithGithub } from "../services/signInWithGithub";
 import { Link } from "react-router-dom";
 
@@ -21,7 +21,7 @@ export function SignInForm() {
     signIn(formData.email, formData.password);
   };
   return (
-    <div className="rounded-lg border-base border w-full max-w-sm p-6">
+    <div className="rounded-md border-base border w-full max-w-sm p-6">
       <form
         className="flex flex-col gap-3 mb-2"
         onSubmit={handleSubmit(handleSignIn)}
@@ -29,9 +29,9 @@ export function SignInForm() {
         name="signup-form"
       >
         <h1 className="mb-2">Sign in</h1>
-        <IconButton Icon={GithubIconDark} handleClick={signInWithGithub}>
+        <IconTextButton Icon={GithubIconDark} handleClick={signInWithGithub}>
           Sign in with github
-        </IconButton>
+        </IconTextButton>
         <div className="flex flex-col gap-3 mb-2">
           <FormField
             register={register}
@@ -45,9 +45,8 @@ export function SignInForm() {
             type="password"
           />
         </div>
-        <Button type="submit">Sign in with password</Button>
+        <TextButton type="submit">Sign in with password</TextButton>
       </form>
-
       <div className="text-sm text-center">
         New to Reminder?{" "}
         <Link className="underline" to="/auth/signup">

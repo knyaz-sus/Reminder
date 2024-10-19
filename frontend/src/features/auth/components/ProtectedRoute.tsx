@@ -13,17 +13,17 @@ export default function ProtectedRoute({
   redirectPath,
   authRequired,
 }: ProtectedRouteProps) {
-  const { user, isLoading } = useAuth();
+  const { authUser, isAuthLoading } = useAuth();
 
-  if (isLoading) {
+  if (isAuthLoading) {
     return;
   }
 
-  if (authRequired && !user) {
+  if (authRequired && !authUser) {
     return <Navigate to={redirectPath} replace />;
   }
 
-  if (!authRequired && user) {
+  if (!authRequired && authUser) {
     return <Navigate to={redirectPath} replace />;
   }
 

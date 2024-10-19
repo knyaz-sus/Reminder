@@ -3,22 +3,22 @@ import { User } from "@supabase/supabase-js";
 import { useCurrentUser } from "../features/auth/hooks/useCurrentUser";
 
 type UserContextType = {
-  user: User | null | undefined;
+  authUser: User | null | undefined;
   refetch: () => Promise<void>;
-  isLoading: boolean;
+  isAuthLoading: boolean;
 };
 
 export const UserContext = createContext<UserContextType>({
-  user: null,
+  authUser: null,
   refetch: async () => {},
-  isLoading: false,
+  isAuthLoading: false,
 });
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const { user, refetch, isLoading } = useCurrentUser();
+  const { authUser, refetch, isAuthLoading } = useCurrentUser();
 
   return (
-    <UserContext.Provider value={{ user, refetch, isLoading }}>
+    <UserContext.Provider value={{ authUser, refetch, isAuthLoading }}>
       {children}
     </UserContext.Provider>
   );
