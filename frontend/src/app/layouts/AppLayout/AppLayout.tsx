@@ -4,28 +4,33 @@ import { useQuery } from "@tanstack/react-query";
 import { UserRow } from "../../../types/database";
 import { useAuth } from "../../../features/auth/hooks/useAuth";
 import { getUserById } from "../../../features/auth/services/getUserById";
-import { LeftBar } from "./LeftBar";
 import { TextButton } from "../../../components/TextButton";
 import { signOut } from "../../../features/auth/services/signOut";
 import { Header } from "./Header";
+import { SideBar } from "./SideBar/SideBar";
 
 export function AppLayout() {
-  const [isNavOpen, setIsNavOpen] = useState(true);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(
+    localStorage.getItem("isSideBarOpen") === "true"
+  );
   const { authUser, isAuthLoading } = useAuth();
   const { data: user } = useQuery<UserRow>({
     queryKey: ["user"],
     queryFn: () => getUserById(authUser?.id),
     enabled: !!authUser && !isAuthLoading,
   });
-  const toggleOpen = () => setIsNavOpen(!isNavOpen);
+  const toggleOpen = () => {
+    setIsSideBarOpen(!isSideBarOpen);
+    localStorage.setItem("isSideBarOpen", `${!isSideBarOpen}`);
+  };
   return (
     <div className="flex min-h-screen">
-      {isNavOpen && <LeftBar user={user} toggleOpen={toggleOpen} />}
+      {isSideBarOpen && <SideBar user={user} />}
       <div className="flex flex-col flex-1 p-3">
-        <Header isNavOpen={isNavOpen} toggleOpen={toggleOpen} />
+        <Header toggleOpen={toggleOpen} />
         <main>
           <Outlet />
-          <TextButton handleClick={signOut}>Sign out</TextButton>
+          <TextButton handleClick={signOut}>{user?.name}</TextButton>
         </main>
       </div>
     </div>

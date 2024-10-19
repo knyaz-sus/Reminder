@@ -5,17 +5,14 @@ import {
 } from "react-icons/hi2";
 
 interface HeaderProps {
-  isNavOpen: boolean;
   toggleOpen: () => void;
 }
 
-export function Header({ isNavOpen, toggleOpen }: HeaderProps) {
+export function Header({ toggleOpen }: HeaderProps) {
   return (
     <header className="flex items-center">
       <div className="flex-1">
-        {!isNavOpen && (
-          <IconButton Icon={HiOutlineBars3} handleClick={toggleOpen} />
-        )}
+        <IconButton Icon={HiOutlineBars3} handleClick={toggleOpen} />
       </div>
       <span className="flex-1 flex justify-center invisible">Info</span>
       <div className="flex-1 flex justify-end">
