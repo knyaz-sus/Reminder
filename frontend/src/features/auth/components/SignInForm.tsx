@@ -1,13 +1,15 @@
-import { TextButton } from "../../../components/TextButton";
-import GithubIconDark from "../../../assets/icons/GithubIconDark.svg";
 import { signInSchema, SingInSchema } from "../utils/validate";
+// import GithubIconDark from "@/assets/icons/GithubIconDark.svg";
+// import GithubIconLight from "@/assets/icons/GithubIconLight.svg";
 import { FormField } from "./FormField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "../services/signIn";
-import { IconTextButton } from "../../../components/IconTextButton";
-import { signInWithGithub } from "../services/signInWithGithub";
-import { Link } from "react-router-dom";
+import { signIn } from "../api/signIn";
+import { Button } from "@/components/Button";
+import { signInWithGithub } from "../api/signInWithGithub";
+import { FormFooter } from "./FormFooter";
+// import { useTheme } from "@/hooks/useTheme";
+// import { useMemo } from "react";
 
 export function SignInForm() {
   const {
@@ -17,21 +19,41 @@ export function SignInForm() {
   } = useForm<SingInSchema>({
     resolver: zodResolver(signInSchema),
   });
+  // const { theme } = useTheme();
+  // const GitHubIcon = useMemo(() => {
+  //   switch (theme) {
+  //     case "light":
+  //       return <img src={GithubIconLight} alt="Github" />;
+  //     case "dark":
+  //       return <img src={GithubIconDark} alt="Github" />;
+  //     case "system": {
+  //       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+  //         .matches
+  //         ? "dark"
+  //         : "light";
+  //       return systemTheme === "light" ? (
+  //         <img src={GithubIconLight} alt="Github" />
+  //       ) : (
+  //         <img src={GithubIconDark} alt="Github" />
+  //       );
+  //     }
+  //   }
+  // }, [theme]);
   const handleSignIn: SubmitHandler<SingInSchema> = (formData) => {
     signIn(formData.email, formData.password);
   };
   return (
-    <div className="rounded-md border-base border w-full max-w-sm p-6">
+    <div className="rounded-md border border-border w-full max-w-sm p-6">
       <form
-        className="flex flex-col gap-3 mb-2"
+        className="flex flex-col gap-3 mb-4"
         onSubmit={handleSubmit(handleSignIn)}
-        id="signup-form"
-        name="signup-form"
+        id="signin-form"
+        name="signin-form"
       >
         <h1 className="mb-2">Sign in</h1>
-        <IconTextButton Icon={GithubIconDark} handleClick={signInWithGithub}>
-          Sign in with github
-        </IconTextButton>
+        <Button type="button" onClick={signInWithGithub}>
+          <span>Sign in with github</span>
+        </Button>
         <div className="flex flex-col gap-3 mb-2">
           <FormField
             register={register}
@@ -45,14 +67,13 @@ export function SignInForm() {
             type="password"
           />
         </div>
-        <TextButton type="submit">Sign in with password</TextButton>
+        <Button type="submit">Sign in with password</Button>
       </form>
-      <div className="text-sm text-center">
-        New to Reminder?{" "}
-        <Link className="underline" to="/auth/signup">
-          Sign up
-        </Link>
-      </div>
+      <FormFooter
+        path="/auth/signup"
+        content="New to Reminder? "
+        link="Sign up"
+      />
     </div>
   );
 }

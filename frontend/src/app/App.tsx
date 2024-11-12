@@ -14,7 +14,7 @@ import { DonePage } from "./pages/DonePage";
 export function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
+      <Route index element={<HomePage />} />
       <Route
         path="/auth"
         element={

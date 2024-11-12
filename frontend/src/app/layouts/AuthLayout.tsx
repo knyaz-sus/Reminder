@@ -1,9 +1,15 @@
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Outlet } from "react-router-dom";
 
 export function AuthLayout() {
   return (
-    <main className="flex flex-col items-center justify-center p-4 min-h-screen">
-      <Outlet />
-    </main>
+    <>
+      <header className="flex justify-end w-full fixed pl-6 pt-3 pb-3 pr-6">
+        <ThemeToggle />
+      </header>
+      <main className="flex flex-col items-center justify-center p-4 min-h-screen">
+        <Outlet />
+      </main>
+    </>
   );
 }

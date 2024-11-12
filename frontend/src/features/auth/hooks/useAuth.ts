@@ -1,4 +1,4 @@
-import { UserContext } from "../../../context/UserProvider";
-import { useContextNullCheck } from "../../../hooks/useContextNullCheck";
+import { UserContext } from "@/context/UserProvider";
+import { useContextTyped } from "@/hooks/useContextTyped";
 
-export const useAuth = () => useContextNullCheck(UserContext);
+export const useAuth = () => useContextTyped(UserContext);

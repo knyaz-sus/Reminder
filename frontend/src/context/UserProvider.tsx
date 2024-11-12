@@ -1,6 +1,6 @@
 import { createContext, ReactNode } from "react";
 import { User } from "@supabase/supabase-js";
-import { useCurrentUser } from "../features/auth/hooks/useCurrentUser";
+import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
 
 type UserContextType = {
   authUser: User | null | undefined;
