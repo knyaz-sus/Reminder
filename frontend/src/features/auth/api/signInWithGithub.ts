@@ -4,7 +4,7 @@ export const signInWithGithub = async () => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "github",
     options: {
-      redirectTo: "http://localhost:5173/app/today",
+      redirectTo: `${import.meta.env.VITE_API_URL}/app`,
     },
   });
 
