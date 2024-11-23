@@ -1,4 +1,4 @@
-import { SidebarContext } from "../context/SideBarProvider";
+import { SidebarContext } from "./SideBarProvider";
 import { useContext } from "react";
 
 export function useSidebar() {
@@ -6,6 +6,5 @@ export function useSidebar() {
   if (!context) {
     throw new Error("useSidebar must be used within a SidebarProvider.");
   }
-
   return context;
 }

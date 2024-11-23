@@ -1,11 +1,11 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
-import { AuthLayout } from "./layouts/AuthLayout";
+import { AuthLayout } from "./layouts/AuthLayout/AuthLayout";
 import { AppTodayPage } from "./pages/AppTodayPage";
-import { AppLayout } from "./layouts/AppLayout";
-import ProtectedRoute from "../features/auth/components/ProtectedRoute";
-import { SignInForm } from "../features/auth/components/SignInForm";
-import { SignUpForm } from "../features/auth/components/SignUpForm";
+import { AppLayout } from "./layouts/AppLayout/AppLayout";
+import ProtectedRoute from "@/features/auth/components/ProtectedRoute";
+import { SignInForm } from "@/features/auth/components/SignInForm";
+import { SignUpForm } from "@/features/auth/components/SignUpForm";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { InboxPage } from "./pages/InboxPage";
 import { UpcomingPage } from "./pages/UpcomingPage";

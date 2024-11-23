@@ -1,4 +1,4 @@
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { ThemeToggle } from "@/app/layouts/AppLayout/ThemeToggle";
 import { Outlet } from "react-router-dom";
 
 export function AuthLayout() {
