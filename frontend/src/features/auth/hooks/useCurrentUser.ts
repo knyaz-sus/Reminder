@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "../../../lib/createSupabase";
+import { supabase } from "@/lib/createSupabase";
 import { User } from "@supabase/supabase-js";
 
 export const useCurrentUser = () => {
-  const [authUser, setAuthUser] = useState<User | null | undefined>(null);
+  const [authUser, setAuthUser] = useState<User | undefined>(undefined);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const fetchUser = useCallback(async () => {
-    const { data, error } = await supabase.auth.getSession();
-    if (error) {
-      console.log(error.message);
-    } else {
-      setAuthUser(data.session?.user);
+    try {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) throw error;
+      else setAuthUser(data.user);
+    } catch (e) {
+      console.log(e);
     }
   }, []);
 
@@ -20,7 +21,9 @@ export const useCurrentUser = () => {
       setAuthUser(session?.user);
       setIsAuthLoading(false);
     });
-    return () => data.subscription.unsubscribe();
+    return () => {
+      data.subscription.unsubscribe();
+    };
   }, []);
 
   return { authUser, refetch: fetchUser, isAuthLoading };
