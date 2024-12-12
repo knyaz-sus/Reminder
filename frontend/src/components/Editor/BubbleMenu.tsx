@@ -24,6 +24,7 @@ export function BubbleMenu() {
       return;
     }
     const domSelection = window.getSelection();
+    if (!domSelection) return;
     const domRange = domSelection.getRangeAt(0);
     const rect = domRange.getBoundingClientRect();
     menu.style.opacity = "1";
