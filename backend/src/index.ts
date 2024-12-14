@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
-import projectsRoute from "./routes/projectsRoute.ts";
-import usersRoute from "./routes/usersRoute.ts";
-import { auth } from "../middleware/auth.ts";
+import projectsRoute from "./routes/projectsRoute";
+import usersRoute from "./routes/usersRoute";
+import { auth } from "../middleware/auth";
 
 const app = express();
 

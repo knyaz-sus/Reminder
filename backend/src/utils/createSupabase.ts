@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
-import { supabaseConfig } from "../config.ts";
-import { Database } from "../types/schema.ts";
+import { supabaseConfig } from "../config";
+import { Database } from "../types/schema";
 
 export const createSupabase = () =>
   createClient<Database>(supabaseConfig.url, supabaseConfig.secretKey);

@@ -1,11 +1,11 @@
 export const addProject = async (
   name: string,
-  accToken: string,
+  accToken?: string,
   userId?: string
 ) => {
   try {
     if (!name || !userId || !accToken) return;
-    const res = await fetch(`${import.meta.env}/projects`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/projects`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accToken}`,
@@ -14,7 +14,8 @@ export const addProject = async (
       },
       body: JSON.stringify({ name, userId }),
     });
-    return await res.json();
+    if (!res.ok) return;
+    console.log(await res.json());
   } catch (e) {
     console.log(e);
   }

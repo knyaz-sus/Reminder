@@ -1,13 +1,9 @@
-import { supabase } from "../utils/createSupabase.ts";
+import { z } from "zod";
+import { supabase } from "../utils/createSupabase";
 import { Request, Response } from "express";
 
 export const addProject = async (req: Request, res: Response) => {
   const { name, userId } = req.body;
-
-  if (!name || !userId) {
-    return res.status(400).json({ message: "Name and ID are required" });
-  }
-
   try {
     const { error } = await supabase
       .from("projects")
@@ -29,14 +25,14 @@ export const addProject = async (req: Request, res: Response) => {
 
 export const getProjects = async (req: Request, res: Response) => {
   const { userId } = req.query;
-  if (!userId) {
+  if (z.string().uuid().safeParse(userId).error) {
     return res.status(400).json({ message: "ID is required" });
   }
   try {
     const { data: projects, error } = await supabase
       .from("projects")
       .select("*")
-      .eq("admin_id", userId);
+      .eq("admin_id", userId as string);
     if (error) {
       console.log(error.message);
       return res

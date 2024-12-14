@@ -10,7 +10,7 @@ import { fetchUser } from "@/api/fetchUser";
 export function SidebarUserMenu() {
   const { session, isAuthLoading } = useAuth();
   const { data: user } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["user", { session }],
     queryFn: () => fetchUser(session?.user.id, session?.access_token),
     enabled: !!session?.user && !isAuthLoading,
     refetchOnWindowFocus: false,

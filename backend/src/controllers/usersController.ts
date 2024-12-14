@@ -1,16 +1,18 @@
 import { Request, Response } from "express";
-import { supabase } from "../utils/createSupabase.ts";
+import { supabase } from "../utils/createSupabase";
+import { z } from "zod";
 
 export const getUser = async (req: Request, res: Response) => {
   const { userId } = req.query;
-  if (!userId) {
-    return res.status(400).json({ message: "ID is required" });
-  }
+
   try {
+    if (z.string().uuid().safeParse(userId).error) {
+      return res.status(400).json({ message: "ID is required" });
+    }
     const { data: user, error } = await supabase
       .from("users")
       .select("*")
-      .eq("id", userId)
+      .eq("id", userId as string)
       .single();
     if (error) {
       console.log(error.message);

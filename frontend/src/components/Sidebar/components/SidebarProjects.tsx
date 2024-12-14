@@ -10,19 +10,29 @@ import {
 } from "./Sidebar";
 import { ChevronDown, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProjects } from "@/api/fetchProjects";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { addProject } from "@/api/addProject";
 
 export function SidebarProjects() {
-  const { session } = useAuth();
+  const queryClient = useQueryClient();
+  const { session, isAuthLoading } = useAuth();
   const {
     data: projects,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["user-projects"],
+    queryKey: ["user-projects", { session }],
     queryFn: () => fetchProjects(session?.user.id, session?.access_token),
+    enabled: !!session?.user && !isAuthLoading,
+  });
+  const { mutateAsync: addProjectMutation } = useMutation({
+    mutationFn: () =>
+      addProject("sgdsgsg", session?.access_token, session?.user.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-projects"] });
+    },
   });
 
   return (
@@ -39,7 +49,16 @@ export function SidebarProjects() {
               My projects
             </Link>
             <button className="[&>svg]:size-4 [&>svg]:shrink-0 p-1 hover:text-sidebar-foreground">
-              <Plus strokeWidth={3} />
+              <Plus
+                onClick={async () => {
+                  try {
+                    await addProjectMutation();
+                  } catch (e) {
+                    console.log(e);
+                  }
+                }}
+                strokeWidth={3}
+              />
             </button>
             <CollapsibleTrigger className="[&>svg]:size-4 [&>svg]:shrink-0 p-1">
               <ChevronDown
