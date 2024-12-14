@@ -8,12 +8,13 @@ import {
   SidebarGroupContent,
   SidebarMenuButton,
 } from "./Sidebar";
-import { ChevronDown, Plus } from "lucide-react";
+import { ChevronDown, Plus, Target } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProjects } from "@/api/fetchProjects";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { addProject } from "@/api/addProject";
+import { ProjectsDropdown } from "./ProjectsDropdown";
 
 export function SidebarProjects() {
   const queryClient = useQueryClient();
@@ -29,7 +30,11 @@ export function SidebarProjects() {
   });
   const { mutateAsync: addProjectMutation } = useMutation({
     mutationFn: () =>
-      addProject("sgdsgsg", session?.access_token, session?.user.id),
+      addProject(
+        "sgdsgsgdsdgsgsdgdsgsdgsdgsdgdsdgsg",
+        session?.access_token,
+        session?.user.id
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-projects"] });
     },
@@ -41,14 +46,12 @@ export function SidebarProjects() {
         <Collapsible defaultOpen className="group/collapsible">
           <div
             className="flex justify-between items-center gap-2
-          w-full rounded-md p-1 overflow-hidden outline-none 
+          w-full rounded-md pl-2 py-1 overflow-hidden outline-none 
           text-sidebar-foreground/80 text-left text-sm font-semibold
           hover:bg-sidebar-accent"
           >
-            <Link className="flex-auto " to="/app">
-              My projects
-            </Link>
-            <button className="[&>svg]:size-4 [&>svg]:shrink-0 p-1 hover:text-sidebar-foreground">
+            <div className="flex-auto">My projects</div>
+            <button className="[&>svg]:size-4 [&>svg]:shrink-0 p- hover:text-sidebar-foreground">
               <Plus
                 onClick={async () => {
                   try {
@@ -77,8 +80,26 @@ export function SidebarProjects() {
                 <div>You don't have any projects</div>
               ) : (
                 projects.map((project) => (
-                  <SidebarMenuButton key={project.id}>
-                    {project.name}
+                  <SidebarMenuButton
+                    className="justify-between pr-0"
+                    key={project.id}
+                    asChild
+                  >
+                    <div>
+                      <Link
+                        className="flex items-center max-w-full ml-1 overflow-hidden gap-2 [&>svg]:size-4 [&>svg]:shrink-0 p-1 hover:text-sidebar-foreground"
+                        to={`/app/projects/${project.id}`}
+                      >
+                        <Target />
+                        <span className="text-ellipsis whitespace-nowrap overflow-hidden">
+                          {project.name}
+                        </span>
+                      </Link>
+                      <ProjectsDropdown
+                        projectId={project.id}
+                        adminId={project.admin_id}
+                      />
+                    </div>
                   </SidebarMenuButton>
                 ))
               ))}

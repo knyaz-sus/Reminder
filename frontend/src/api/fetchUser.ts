@@ -1,25 +1,18 @@
-import { UserRow } from "@/types/schema";
 import { userRowSchema } from "@/types/zod";
+import { fetchWithToken } from "@/api/fetchWithToken";
 
-export const fetchUser = async (userId?: string, accToken?: string) => {
-  if (!userId || !accToken) return;
-
+export const fetchUser = async (
+  userId: string | undefined,
+  accToken: string | undefined
+) => {
+  if (!userId) return;
   try {
-    const url = new URL(`${import.meta.env.VITE_API_URL}/users`);
-    url.searchParams.append("userId", userId);
-
-    const res = await fetch(url.toString(), {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accToken}`,
-        "Content-Type": "application/json",
-      },
+    return await fetchWithToken({
+      endpoint: `${import.meta.env.VITE_API_URL}/users/${userId}`,
+      accToken,
+      schema: userRowSchema,
     });
-    if (!res.ok) return;
-    const user: UserRow = await res.json();
-    userRowSchema.parse(user);
-    return user;
-  } catch (error) {
-    console.error("Error fetching projects:", error);
+  } catch (e) {
+    console.log(e);
   }
 };

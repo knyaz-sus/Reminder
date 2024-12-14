@@ -3,9 +3,8 @@ import { supabase } from "../utils/createSupabase";
 import { z } from "zod";
 
 export const getUser = async (req: Request, res: Response) => {
-  const { userId } = req.query;
-
   try {
+    const userId = req.params.id;
     if (z.string().uuid().safeParse(userId).error) {
       return res.status(400).json({ message: "ID is required" });
     }

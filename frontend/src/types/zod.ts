@@ -7,3 +7,12 @@ export const userRowSchema = z.object({
   name: z.string(),
   provider: z.string(),
 });
+
+export const projectSchema = z.object({
+  admin_id: z.string().uuid(),
+  id: z.string().uuid(),
+  name: z.string().min(1),
+  updated_at: z.string(),
+});
+
+export const projectsSchema = z.array(projectSchema);

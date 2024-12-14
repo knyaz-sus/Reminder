@@ -1,23 +1,18 @@
-import { Projects } from "@/types/schema";
+import { projectsSchema } from "@/types/zod";
+import { fetchWithToken } from "@/api/fetchWithToken";
 
-export const fetchProjects = async (userId?: string, accToken?: string) => {
-  if (!userId || !accToken) return;
-
+export const fetchProjects = async (
+  userId: string | undefined,
+  accToken: string | undefined
+) => {
+  if (!userId) return;
   try {
-    const url = new URL(`${import.meta.env.VITE_API_URL}/projects`);
-    url.searchParams.append("userId", userId);
-
-    const res = await fetch(url.toString(), {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accToken}`,
-        "Content-Type": "application/json",
-      },
+    return await fetchWithToken({
+      endpoint: `${import.meta.env.VITE_API_URL}/projects/${userId}`,
+      accToken,
+      schema: projectsSchema,
     });
-    if (!res.ok) return;
-    const projects: Projects = await res.json();
-    return projects;
-  } catch (error) {
-    console.error("Error fetching projects:", error);
+  } catch (e) {
+    console.log(e);
   }
 };

@@ -10,6 +10,7 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { InboxPage } from "./pages/InboxPage";
 import { UpcomingPage } from "./pages/UpcomingPage";
 import { DonePage } from "./pages/DonePage";
+import { ProjectPage } from "./pages/ProjectPage";
 
 export function App() {
   return (
@@ -41,6 +42,7 @@ export function App() {
         <Route path="/app/inbox" element={<InboxPage />} />
         <Route path="/app/upcoming" element={<UpcomingPage />} />
         <Route path="/app/today" element={<AppTodayPage />} />
+        <Route path="/app/projects/:id" element={<ProjectPage />} />
         <Route path="/app/*" element={<Navigate to="today" replace />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />

@@ -3,6 +3,6 @@ import { getUser } from "../controllers/usersController.ts";
 
 const router = Router();
 
-router.get("/", getUser);
+router.get("/:id", getUser);
 
 export default router;
