@@ -13,11 +13,11 @@ export default function ProtectedRoute({
   redirectPath,
   authRequired,
 }: ProtectedRouteProps) {
-  const { authUser, isAuthLoading } = useAuth();
+  const { session, isAuthLoading } = useAuth();
 
   if (isAuthLoading) return;
 
-  if ((authRequired && !authUser) || (!authRequired && authUser))
+  if ((authRequired && !session?.user) || (!authRequired && session?.user))
     return <Navigate to={redirectPath} replace />;
 
   return children;

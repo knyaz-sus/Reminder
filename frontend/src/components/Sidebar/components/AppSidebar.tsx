@@ -2,17 +2,16 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-} from "@/features/sidebar/components/Sidebar";
-import { UserRow } from "@/types/database";
+} from "@/components/Sidebar/components/Sidebar";
 import { SidebarRoutes } from "./SidebarRoutes";
 import { SidebarProjects } from "./SidebarProjects";
 import { SidebarUserMenu } from "./SidebarUserMenu";
 
-export function AppSidebar({ user }: { user?: UserRow }) {
+export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <SidebarUserMenu user={user} />
+        <SidebarUserMenu />
       </SidebarHeader>
       <SidebarContent>
         <SidebarRoutes />

@@ -9,7 +9,7 @@ import { Separator } from "@/components/Separator";
 import { Sheet, SheetContent } from "@/components/Sheet";
 import { Skeleton } from "@/components/Skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/Tooltip";
-import { useSidebar } from "@/features/sidebar/useSideBar";
+import { useSidebar } from "@/hooks/useSideBar";
 import { SIDEBAR_WIDTH_MOBILE } from "../constants";
 import { sidebarMenuButtonVariants } from "@/components/variants/sidebarMenuButtonVariants";
 

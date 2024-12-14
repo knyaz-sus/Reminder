@@ -1,4 +1,4 @@
-import { SidebarContext } from "./SideBarProvider";
+import { SidebarContext } from "../context/SideBarProvider";
 import { useContext } from "react";
 
 export function useSidebar() {

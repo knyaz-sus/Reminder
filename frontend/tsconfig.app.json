@@ -25,6 +25,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "env.d.ts", "vitest-setup.ts", "vitest/globals", "src/test"],
+  "include": ["src", "env.d.ts", "vitest-setup.ts", "vitest/globals", "src/test", "../backend/src/routes/types/schema.ts"],
   "exclude": ["node_modules", "dist"]
 }

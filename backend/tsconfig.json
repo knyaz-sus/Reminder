@@ -6,12 +6,12 @@
     "strict": true,
     "sourceMap": true,
     "skipLibCheck": true,
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "include": ["src/**/*", "env.d.ts"],
+  "include": ["src/*", "src/**/*", "env.d.ts", "src/index.ts"],
   "exclude": ["node_modules"]
 }

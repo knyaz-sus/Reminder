@@ -3,11 +3,28 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/Collapsible";
-import { SidebarGroup, SidebarGroupContent } from "./Sidebar";
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenuButton,
+} from "./Sidebar";
 import { ChevronDown, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProjects } from "@/api/fetchProjects";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 export function SidebarProjects() {
+  const { session } = useAuth();
+  const {
+    data: projects,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["user-projects"],
+    queryFn: () => fetchProjects(session?.user.id, session?.access_token),
+  });
+
   return (
     <SidebarGroup>
       <SidebarGroupContent>
@@ -34,7 +51,18 @@ export function SidebarProjects() {
             </CollapsibleTrigger>
           </div>
           <CollapsibleContent>
-            <SidebarGroupContent>тут будут проекты</SidebarGroupContent>
+            {isLoading && <div>Loading...</div>}
+            {isError && <div>Can't get projects</div>}
+            {!!projects &&
+              (projects.length === 0 ? (
+                <div>You don't have any projects</div>
+              ) : (
+                projects.map((project) => (
+                  <SidebarMenuButton key={project.id}>
+                    {project.name}
+                  </SidebarMenuButton>
+                ))
+              ))}
           </CollapsibleContent>
         </Collapsible>
       </SidebarGroupContent>

@@ -1,5 +1,5 @@
 import { Editor } from "slate";
-import { Format } from "./types";
+import { Format } from "./Editor";
 
 export const toggleMark = (editor: Editor, format: Format) => {
   const isActive = isMarkActive(editor, format);

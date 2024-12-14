@@ -1,5 +1,5 @@
 import { ThemeToggle } from "@/app/layouts/AppLayout/ThemeToggle";
-import { SidebarTrigger } from "@/features/sidebar/components/Sidebar";
+import { SidebarTrigger } from "@/components/Sidebar/components/Sidebar";
 import { ViewOptions } from "./ViewOptions";
 
 export function AppHeader() {

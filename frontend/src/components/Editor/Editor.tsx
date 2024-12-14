@@ -7,6 +7,28 @@ import { BubbleMenu } from "./BubbleMenu";
 import { toggleMark } from "./helpers";
 import { EditableProps } from "slate-react/dist/components/editable";
 
+import { BaseEditor } from "slate";
+import { ReactEditor } from "slate-react";
+
+export type CustomText = {
+  text: string;
+  bold?: true;
+  italic?: true;
+  underline?: true;
+};
+
+declare module "slate" {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor;
+    Element: CustomElement;
+    Text: CustomText;
+  }
+}
+
+export type CustomElement = { type: "paragraph"; children: CustomText[] };
+
+export type Format = "bold" | "italic" | "underline";
+
 const initialValue: Descendant[] = [
   {
     type: "paragraph",
