@@ -27,10 +27,10 @@ export function SidebarRoutes() {
               <span>Search</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          {sidebarMenuRoutes.map((route) => {
+          {sidebarMenuRoutes.map((route, index) => {
             const { path, name, Icon } = route;
             return (
-              <SidebarMenuItem key={path}>
+              <SidebarMenuItem key={path + index}>
                 <SidebarMenuButton
                   asChild
                   isActive={location.pathname === path}

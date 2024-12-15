@@ -4,7 +4,6 @@ import { AppSidebar } from "@/components/Sidebar/components/AppSidebar";
 import { AppHeader } from "./AppHeader";
 
 export function AppLayout() {
- 
   return (
     <SidebarProvider>
       <AppSidebar />

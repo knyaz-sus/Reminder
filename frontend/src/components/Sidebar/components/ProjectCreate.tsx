@@ -11,21 +11,20 @@ import {
 } from "@/components/Dialog";
 import { Button } from "@/components/Button";
 import { Plus } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addProject } from "@/api/addProject";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useAddOptimistic } from "@/hooks/useAddOptimistic";
+import { Project } from "@/types/schema";
 
 export function ProjectCreate() {
   const { session } = useAuth();
-  const queryClient = useQueryClient();
   const [projectName, setProjectName] = useState("");
   const [open, setOpen] = useState(false);
-  const { mutateAsync: addProjectMutation } = useMutation({
+  const addProjectMutation = useAddOptimistic<Project>({
     mutationFn: () =>
       addProject(projectName, session?.access_token, session?.user.id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user-projects"] });
-    },
+    queryKey: ["user-projects", { session }],
+    newEntity: { name: projectName },
   });
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -58,14 +57,9 @@ export function ProjectCreate() {
             </Button>
           </DialogClose>
           <Button
-            onClick={async () => {
-              try {
-                await addProjectMutation();
-                setOpen(false);
-                setProjectName("");
-              } catch (e) {
-                console.log(e);
-              }
+            onClick={() => {
+              addProjectMutation.mutate(session?.user.id);
+              setOpen(false);
             }}
             size="sm"
             disabled={projectName === ""}

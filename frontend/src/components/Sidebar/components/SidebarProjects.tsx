@@ -5,25 +5,25 @@ import {
 } from "@/components/Collapsible";
 import { SidebarGroup, SidebarGroupContent } from "./Sidebar";
 import { ChevronDown } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import { fetchProjects } from "@/api/fetchProjects";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ProjectCreate } from "./ProjectCreate";
 import { SidebarProject } from "./SidebarProject";
 import { useLocation } from "react-router-dom";
-
 export function SidebarProjects() {
   const location = useLocation();
-  const { session, isAuthLoading } = useAuth();
+  const { session } = useAuth();
   const {
     data: projects,
-    isLoading,
+    isPending,
     isError,
-  } = useQuery({
-    queryKey: ["user-projects", { session }],
-    queryFn: () => fetchProjects(session?.user.id, session?.access_token),
-    enabled: !!session?.user && !isAuthLoading,
-  });
+  } = useQuery(
+    queryOptions({
+      queryKey: ["user-projects", { session }],
+      queryFn: () => fetchProjects(session?.user.id, session?.access_token),
+    })
+  );
 
   return (
     <SidebarGroup>
@@ -47,7 +47,7 @@ export function SidebarProjects() {
             </CollapsibleTrigger>
           </div>
           <CollapsibleContent className="overflow-auto">
-            {isLoading && <div>Loading...</div>}
+            {isPending && <div>Loading...</div>}
             {isError && <div>Can't get projects</div>}
             {!!projects &&
               (projects.length === 0 ? (

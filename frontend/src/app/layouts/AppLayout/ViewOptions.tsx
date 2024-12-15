@@ -11,7 +11,7 @@ export function ViewOptions() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="sm">
           <Layers />
           <span className="sr-only">View options</span>
         </Button>

@@ -20,43 +20,44 @@ import {
   DropdownMenuPortal,
   DropdownMenuTrigger,
 } from "@/components/DropdownMenu";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { deleteProject } from "@/api/deleteProject";
-import { updateProject } from "@/api/updateProject";
 import { useState } from "react";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
+import { useDeleteOptimistic } from "@/hooks/useDeleteOptimistic";
+import { updateProject } from "@/api/updateProject";
+import { Project } from "@/types/schema";
+import { useUpdateOptimistic } from "@/hooks/useUpdateOptimistic";
 
-export function SidebarProject({
-  id,
-  adminId,
-  name,
-  isActive,
-}: {
+interface SidebarProjectProps {
   id: string;
   adminId: string;
   name: string;
   isActive: boolean;
-}) {
-  const queryClient = useQueryClient();
+}
+
+export function SidebarProject({
+  isActive,
+  id,
+  adminId,
+  name,
+}: SidebarProjectProps) {
   const { session } = useAuth();
   const [updateName, setUpdateName] = useState("");
-  const { mutateAsync: deleteProjectMutation } = useMutation({
-    mutationFn: async () => {
-      await deleteProject(id, adminId, session?.access_token);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user-projects"] });
-    },
+  const [open, setOpen] = useState(false);
+  const deleteMutation = useDeleteOptimistic<Project>({
+    mutationFn: () =>
+      deleteProject({ id, adminId, accToken: session?.access_token }),
+    queryKey: ["user-projects", { session }],
+    id,
   });
-  const { mutateAsync: updateProjectMutation } = useMutation({
-    mutationFn: async () => {
-      await updateProject(id, name, session?.access_token);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user-projects"] });
-    },
+  const updateMutation = useUpdateOptimistic<Project>({
+    mutationFn: () =>
+      updateProject({ id, name: updateName, accToken: session?.access_token }),
+    queryKey: ["user-projects", { session }],
+    id,
+    updateList: { name: updateName },
   });
   return (
     <SidebarMenuButton className={styles.parent} isActive={isActive} asChild>
@@ -71,7 +72,9 @@ export function SidebarProject({
           </span>
         </Link>
         <Dialog
+          open={open}
           onOpenChange={() => {
+            setOpen((prev) => !prev);
             setUpdateName("");
           }}
         >
@@ -91,13 +94,7 @@ export function SidebarProject({
                 </DialogTrigger>
                 <DropdownMenuItem
                   className="gap-3"
-                  onClick={async () => {
-                    try {
-                      await deleteProjectMutation();
-                    } catch (e) {
-                      console.log(e);
-                    }
-                  }}
+                  onClick={() => deleteMutation.mutate(id)}
                 >
                   <Trash2 />
                   <span>Delete</span>
@@ -132,12 +129,9 @@ export function SidebarProject({
                   </Button>
                 </DialogClose>
                 <Button
-                  onClick={async () => {
-                    try {
-                      await updateProjectMutation();
-                    } catch (e) {
-                      console.log(e);
-                    }
+                  onClick={() => {
+                    setOpen(false);
+                    updateMutation.mutate(id);
                   }}
                   size="sm"
                   disabled={updateName === ""}
