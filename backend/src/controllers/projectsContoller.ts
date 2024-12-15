@@ -8,7 +8,7 @@ export const addProject = async (req: Request, res: Response) => {
     const { name, userId } = req.body;
     const { error } = await supabase
       .from("projects")
-      .insert({ name, admin_id: userId });
+      .insert({ name, adminId: userId });
 
     if (error) {
       console.log(error.message);
@@ -33,7 +33,7 @@ export const getProjects = async (req: Request, res: Response) => {
     const { data: projects, error } = await supabase
       .from("projects")
       .select("*")
-      .eq("admin_id", userId as string);
+      .eq("adminId", userId as string);
     if (error) {
       console.log(error.message);
       return res
@@ -69,9 +69,33 @@ export const deleteProject = async (req: Request, res: Response) => {
       console.log(error.message);
       return res
         .status(500)
-        .json({ message: "Error deleting projects", error: error.message });
+        .json({ message: "Error deleting project", error: error.message });
     }
     return res.status(200).json({ message: "Project deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+export const updateProject = async (req: Request, res: Response) => {
+  try {
+    const name = req.body.name;
+    const projectId = req.params.id;
+    const validateProjectId = z.string().uuid().safeParse(projectId);
+    const validateName = z.string().min(1).safeParse(name);
+    if (validateProjectId.error || validateName.error) {
+      return res.status(400).json({ message: "Missing requared params" });
+    }
+    const { error } = await supabase
+      .from("projects")
+      .update({ name })
+      .eq("id", projectId);
+    if (error) {
+      console.log(error.message);
+      return res
+        .status(500)
+        .json({ message: "Error updating project", error: error.message });
+    }
+    return res.status(200).json({ message: "Project updated successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }

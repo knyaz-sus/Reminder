@@ -105,6 +105,37 @@ const DialogDescription = React.forwardRef<
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
+// const DialogItem = (props) => {
+//   const { triggerChildren, children, onSelect, onOpenChange, ...itemProps } =
+//     props;
+//   return (
+//     <Dialog onOpenChange={onOpenChange}>
+//       <DialogTrigger asChild>
+//         <DropdownMenu
+//           {...itemProps}
+//           className="DropdownMenuItem"
+//           onSelect={(event) => {
+//             event.preventDefault();
+//             onSelect && onSelect();
+//           }}
+//         >
+//           {triggerChildren}
+//         </DropdownMenu>
+//       </DialogTrigger>
+//       <DialogPortal>
+//         <DialogOverlay className="DialogOverlay" />
+//         <DialogContent className="DialogContent">
+//           {children}
+//           <DialogClose asChild>
+//             <button className="IconButton" aria-label="Close">
+//               <Cross />
+//             </button>
+//           </DialogClose>
+//         </DialogContent>
+//       </DialogPortal>
+//     </Dialog>
+//   );
+// };
 export {
   Dialog,
   DialogPortal,

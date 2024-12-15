@@ -1,4 +1,3 @@
-import { ThemeToggle } from "@/app/layouts/AppLayout/ThemeToggle";
 import { SidebarTrigger } from "@/components/Sidebar/components/Sidebar";
 import { ViewOptions } from "./ViewOptions";
 
@@ -8,7 +7,6 @@ export function AppHeader() {
       <SidebarTrigger />
       <div className="flex gap-4 items-center">
         <ViewOptions />
-        <ThemeToggle />
       </div>
     </header>
   );

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const userRowSchema = z.object({
-  created_at: z.string(),
+  createdAt: z.string(),
   email: z.string().email("Wrong email format"),
   id: z.string().uuid(),
   name: z.string(),
@@ -9,10 +9,10 @@ export const userRowSchema = z.object({
 });
 
 export const projectSchema = z.object({
-  admin_id: z.string().uuid(),
+  adminId: z.string().uuid(),
   id: z.string().uuid(),
   name: z.string().min(1),
-  updated_at: z.string(),
+  updatedAt: z.string(),
 });
 
 export const projectsSchema = z.array(projectSchema);

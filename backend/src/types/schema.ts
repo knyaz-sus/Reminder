@@ -36,25 +36,22 @@ export type Database = {
     Tables: {
       projects: {
         Row: {
-          admin_id: string;
+          adminId: string;
           id: string;
-          is_default: boolean;
           name: string;
-          updated_at: string;
+          updatedAt: string;
         };
         Insert: {
-          admin_id: string;
+          adminId: string;
           id?: string;
-          is_default?: boolean;
           name: string;
-          updated_at?: string;
+          updatedAt?: string;
         };
         Update: {
-          admin_id?: string;
+          adminId?: string;
           id?: string;
-          is_default?: boolean;
           name?: string;
-          updated_at?: string;
+          updatedAt?: string;
         };
         Relationships: [];
       };
@@ -62,22 +59,22 @@ export type Database = {
         Row: {
           id: string;
           name: string;
-          project_id: string;
+          projectId: string;
         };
         Insert: {
           id?: string;
           name: string;
-          project_id: string;
+          projectId: string;
         };
         Update: {
           id?: string;
           name?: string;
-          project_id?: string;
+          projectId?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "sections_project_id_fkey";
-            columns: ["project_id"];
+            foreignKeyName: "sections_projectId_fkey";
+            columns: ["projectId"];
             isOneToOne: false;
             referencedRelation: "projects";
             referencedColumns: ["id"];
@@ -89,43 +86,43 @@ export type Database = {
           date: string | null;
           description: string | null;
           id: string;
-          is_done: boolean;
-          project_id: string | null;
-          section_id: string | null;
+          isDone: boolean;
+          projectId: string | null;
+          sectionId: string | null;
           title: string;
-          updated_at: string;
+          updatedAt: string;
         };
         Insert: {
           date?: string | null;
           description?: string | null;
           id?: string;
-          is_done?: boolean;
-          project_id?: string | null;
-          section_id?: string | null;
+          isDone?: boolean;
+          projectId?: string | null;
+          sectionId?: string | null;
           title: string;
-          updated_at?: string;
+          updatedAt?: string;
         };
         Update: {
           date?: string | null;
           description?: string | null;
           id?: string;
-          is_done?: boolean;
-          project_id?: string | null;
-          section_id?: string | null;
+          isDone?: boolean;
+          projectId?: string | null;
+          sectionId?: string | null;
           title?: string;
-          updated_at?: string;
+          updatedAt?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "tasks_project_id_fkey";
-            columns: ["project_id"];
+            foreignKeyName: "tasks_projectId_fkey";
+            columns: ["projectId"];
             isOneToOne: false;
             referencedRelation: "projects";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "tasks_section_id_fkey";
-            columns: ["section_id"];
+            foreignKeyName: "tasks_sectionId_fkey";
+            columns: ["sectionId"];
             isOneToOne: false;
             referencedRelation: "sections";
             referencedColumns: ["id"];
@@ -134,21 +131,21 @@ export type Database = {
       };
       users: {
         Row: {
-          created_at: string;
+          createdAt: string;
           email: string;
           id: string;
           name: string | null;
           provider: string | null;
         };
         Insert: {
-          created_at?: string;
+          createdAt?: string;
           email: string;
           id: string;
           name?: string | null;
           provider?: string | null;
         };
         Update: {
-          created_at?: string;
+          createdAt?: string;
           email?: string;
           id?: string;
           name?: string | null;
@@ -158,28 +155,28 @@ export type Database = {
       };
       users_projects: {
         Row: {
-          project_id: string;
-          user_id: string;
+          projectId: string;
+          userId: string;
         };
         Insert: {
-          project_id?: string;
-          user_id?: string;
+          projectId?: string;
+          userId?: string;
         };
         Update: {
-          project_id?: string;
-          user_id?: string;
+          projectId?: string;
+          userId?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "users_projects_project_id_fkey";
-            columns: ["project_id"];
+            foreignKeyName: "users_projects_projectId_fkey";
+            columns: ["projectId"];
             isOneToOne: false;
             referencedRelation: "projects";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "users_projects_user_id_fkey";
-            columns: ["user_id"];
+            foreignKeyName: "users_projects_userId_fkey";
+            columns: ["userId"];
             isOneToOne: false;
             referencedRelation: "users";
             referencedColumns: ["id"];
@@ -298,5 +295,6 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
   ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
   : never;
-
 export type UserRow = Database["public"]["Tables"]["users"]["Row"];
+export type Project = Database["public"]["Tables"]["projects"]["Row"];
+export type Projects = Project[];
