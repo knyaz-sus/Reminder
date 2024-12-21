@@ -55,32 +55,6 @@ export type Database = {
         };
         Relationships: [];
       };
-      sections: {
-        Row: {
-          id: string;
-          name: string;
-          projectId: string;
-        };
-        Insert: {
-          id?: string;
-          name: string;
-          projectId: string;
-        };
-        Update: {
-          id?: string;
-          name?: string;
-          projectId?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "sections_projectId_fkey";
-            columns: ["projectId"];
-            isOneToOne: false;
-            referencedRelation: "projects";
-            referencedColumns: ["id"];
-          }
-        ];
-      };
       tasks: {
         Row: {
           date: string | null;
@@ -88,7 +62,6 @@ export type Database = {
           id: string;
           isDone: boolean;
           projectId: string | null;
-          sectionId: string | null;
           title: string;
           updatedAt: string;
         };
@@ -98,7 +71,6 @@ export type Database = {
           id?: string;
           isDone?: boolean;
           projectId?: string | null;
-          sectionId?: string | null;
           title: string;
           updatedAt?: string;
         };
@@ -108,7 +80,6 @@ export type Database = {
           id?: string;
           isDone?: boolean;
           projectId?: string | null;
-          sectionId?: string | null;
           title?: string;
           updatedAt?: string;
         };
@@ -118,13 +89,6 @@ export type Database = {
             columns: ["projectId"];
             isOneToOne: false;
             referencedRelation: "projects";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tasks_sectionId_fkey";
-            columns: ["sectionId"];
-            isOneToOne: false;
-            referencedRelation: "sections";
             referencedColumns: ["id"];
           }
         ];
@@ -295,6 +259,3 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
   ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
   : never;
-export type UserRow = Database["public"]["Tables"]["users"]["Row"];
-export type Project = Database["public"]["Tables"]["projects"]["Row"];
-export type Projects = Project[];

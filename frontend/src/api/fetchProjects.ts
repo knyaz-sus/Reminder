@@ -1,5 +1,5 @@
-import { projectsSchema } from "@/types/zod";
-import { fetchWithToken } from "@/api/fetchWithToken";
+import { projectsSchema } from "@/types/schemas";
+import { fetchWithValidation } from "@/api/fetchWithValidation";
 
 export const fetchProjects = async (
   userId: string | undefined,
@@ -7,11 +7,11 @@ export const fetchProjects = async (
 ) => {
   if (!userId) return;
   try {
-    return await fetchWithToken({
-      endpoint: `${import.meta.env.VITE_API_URL}/projects/${userId}`,
+    return await fetchWithValidation(
+      `/projects/?userId=${userId}`,
       accToken,
-      schema: projectsSchema,
-    });
+      projectsSchema
+    );
   } catch (e) {
     console.log(e);
   }

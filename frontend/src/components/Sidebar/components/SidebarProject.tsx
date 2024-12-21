@@ -1,5 +1,5 @@
 import styles from "../Sidebar.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SidebarMenuButton } from "./Sidebar";
 import { Ellipsis, Hash, PencilLine, Trash2 } from "lucide-react";
 import {
@@ -27,8 +27,9 @@ import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { useDeleteOptimistic } from "@/hooks/useDeleteOptimistic";
 import { updateProject } from "@/api/updateProject";
-import { Project } from "@/types/schema";
+import { Project } from "@/types/schemas";
 import { useUpdateOptimistic } from "@/hooks/useUpdateOptimistic";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface SidebarProjectProps {
   id: string;
@@ -43,6 +44,8 @@ export function SidebarProject({
   adminId,
   name,
 }: SidebarProjectProps) {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { session } = useAuth();
   const [updateName, setUpdateName] = useState("");
   const [open, setOpen] = useState(false);
@@ -58,6 +61,8 @@ export function SidebarProject({
     queryKey: ["user-projects", { session }],
     id,
     updateList: { name: updateName },
+    onSettledCallback: () =>
+      queryClient.invalidateQueries({ queryKey: ["projectId", id] }),
   });
   return (
     <SidebarMenuButton className={styles.parent} isActive={isActive} asChild>
@@ -94,7 +99,10 @@ export function SidebarProject({
                 </DialogTrigger>
                 <DropdownMenuItem
                   className="gap-3"
-                  onClick={() => deleteMutation.mutate(id)}
+                  onClick={() => {
+                    navigate("/app");
+                    deleteMutation.mutate(id);
+                  }}
                 >
                   <Trash2 />
                   <span>Delete</span>
@@ -132,6 +140,9 @@ export function SidebarProject({
                   onClick={() => {
                     setOpen(false);
                     updateMutation.mutate(id);
+                    queryClient.invalidateQueries({
+                      queryKey: ["projectId", id],
+                    });
                   }}
                   size="sm"
                   disabled={updateName === ""}

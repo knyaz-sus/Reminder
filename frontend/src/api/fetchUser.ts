@@ -1,18 +1,10 @@
-import { userRowSchema } from "@/types/zod";
-import { fetchWithToken } from "@/api/fetchWithToken";
+import { userRowSchema } from "@/types/schemas";
+import { fetchWithValidation } from "@/api/fetchWithValidation";
 
 export const fetchUser = async (
   userId: string | undefined,
   accToken: string | undefined
 ) => {
   if (!userId) return;
-  try {
-    return await fetchWithToken({
-      endpoint: `${import.meta.env.VITE_API_URL}/users/${userId}`,
-      accToken,
-      schema: userRowSchema,
-    });
-  } catch (e) {
-    console.log(e);
-  }
+  return await fetchWithValidation(`/users/${userId}`, accToken, userRowSchema);
 };

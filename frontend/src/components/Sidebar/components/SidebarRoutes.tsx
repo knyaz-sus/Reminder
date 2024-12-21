@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -15,12 +15,6 @@ export function SidebarRoutes() {
     <SidebarGroup>
       <SidebarGroupContent>
         <SidebarMenu>
-          <SidebarMenuItem className="text-sidebar-foreground/80 hover:text-none">
-            <SidebarMenuButton className="hover:text-none">
-              <Plus strokeWidth={3} />
-              <span className="font-semibold">Add new todo</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton>
               <Search />

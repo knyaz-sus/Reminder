@@ -10,10 +10,12 @@ export const useAddOptimistic = <T extends { id: string }>({
   mutationFn,
   queryKey,
   newEntity,
+  onSettledCallback,
 }: {
   mutationFn: MutationFunction;
   queryKey: QueryKey;
   newEntity: Partial<T>;
+  onSettledCallback?: () => void;
 }) => {
   const queryClient = useQueryClient();
   const updateMutation = useMutation({
@@ -41,6 +43,7 @@ export const useAddOptimistic = <T extends { id: string }>({
       queryClient.invalidateQueries({
         queryKey,
       });
+      if (onSettledCallback) onSettledCallback();
     },
   });
   return updateMutation;

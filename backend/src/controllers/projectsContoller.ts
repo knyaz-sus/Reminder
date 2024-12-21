@@ -1,15 +1,23 @@
-import { z } from "zod";
 import { supabase } from "../utils/createSupabase";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { zParse } from "../utils/zParse";
+import {
+  addProjectRequestSchema,
+  deleteProjectRequestSchema,
+  getProjectRequestSchema,
+  getProjectsRequestSchema,
+  updateProjectRequestSchema,
+} from "../types/schemas";
 
 export const addProject = async (req: Request, res: Response) => {
   try {
-    const { name, userId } = req.body;
+    const {
+      body: { name, userId },
+    } = await zParse(addProjectRequestSchema, req, res);
     const { error } = await supabase
       .from("projects")
       .insert({ name, adminId: userId });
-
     if (error) {
       console.log(error.message);
       return res
@@ -26,14 +34,13 @@ export const addProject = async (req: Request, res: Response) => {
 
 export const getProjects = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.id;
-    if (z.string().uuid().safeParse(userId).error) {
-      return res.status(400).json({ message: "ID is required" });
-    }
+    const {
+      query: { userId },
+    } = await zParse(getProjectsRequestSchema, req, res);
     const { data: projects, error } = await supabase
       .from("projects")
       .select("*")
-      .eq("adminId", userId as string);
+      .eq("adminId", userId);
     if (error) {
       console.log(error.message);
       return res
@@ -48,23 +55,22 @@ export const getProjects = async (req: Request, res: Response) => {
 
 export const deleteProject = async (req: Request, res: Response) => {
   try {
-    const projectId = req.params.id;
+    const {
+      params: { id: projectId },
+      body: { adminId },
+    } = await zParse(deleteProjectRequestSchema, req, res);
     const token = req.header("Authorization")?.replace("Bearer ", "");
-    const adminId = req.body.adminId;
-    const validateProjectId = z.string().uuid().safeParse(projectId);
-    const validateAdminId = z.string().uuid().safeParse(adminId);
-    if (validateProjectId.error || validateAdminId.error || !token) {
-      return res.status(400).json({ message: "Missing requared params" });
-    }
-    const decodedToken = jwt.decode(token, { complete: true, json: true });
+    const decodedToken = jwt.decode(token as string, {
+      complete: true,
+      json: true,
+    });
     if (decodedToken?.payload.sub !== adminId) {
       return res.status(400).json({ message: "Only admin can delete project" });
     }
-
     const { error } = await supabase
       .from("projects")
       .delete()
-      .eq("id", projectId as string);
+      .eq("id", projectId);
     if (error) {
       console.log(error.message);
       return res
@@ -78,13 +84,10 @@ export const deleteProject = async (req: Request, res: Response) => {
 };
 export const updateProject = async (req: Request, res: Response) => {
   try {
-    const name = req.body.name;
-    const projectId = req.params.id;
-    const validateProjectId = z.string().uuid().safeParse(projectId);
-    const validateName = z.string().min(1).safeParse(name);
-    if (validateProjectId.error || validateName.error) {
-      return res.status(400).json({ message: "Missing requared params" });
-    }
+    const {
+      body: { name },
+      params: { id: projectId },
+    } = await zParse(updateProjectRequestSchema, req, res);
     const { error } = await supabase
       .from("projects")
       .update({ name })
@@ -96,6 +99,28 @@ export const updateProject = async (req: Request, res: Response) => {
         .json({ message: "Error updating project", error: error.message });
     }
     return res.status(200).json({ message: "Project updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const getProject = async (req: Request, res: Response) => {
+  try {
+    const {
+      params: { id: projectId },
+    } = await zParse(getProjectRequestSchema, req, res);
+    const { data: project, error } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("id", projectId)
+      .single();
+    if (error) {
+      console.log(error.message);
+      return res
+        .status(500)
+        .json({ message: "Error fetching project", error: error.message });
+    }
+    res.status(200).json(project);
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }

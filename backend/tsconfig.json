@@ -13,6 +13,12 @@
     "noEmit": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/*", "src/**/*", "env.d.ts", "src/index.ts"],
+  "include": [
+    "src/*",
+    "src/**/*",
+    "env.d.ts",
+    "src/index.ts",
+    "src/utils/validate.ts"
+  ],
   "exclude": ["node_modules"]
 }

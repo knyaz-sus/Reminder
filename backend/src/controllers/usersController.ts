@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import { supabase } from "../utils/createSupabase";
-import { z } from "zod";
+import { zParse } from "../utils/zParse";
+import { getUserRequestSchema } from "../types/schemas";
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.id;
-    if (z.string().uuid().safeParse(userId).error) {
-      return res.status(400).json({ message: "ID is required" });
-    }
+    const {
+      params: { id: userId },
+    } = await zParse(getUserRequestSchema, req, res);
     const { data: user, error } = await supabase
       .from("users")
       .select("*")
-      .eq("id", userId as string)
+      .eq("id", userId)
       .single();
     if (error) {
       console.log(error.message);

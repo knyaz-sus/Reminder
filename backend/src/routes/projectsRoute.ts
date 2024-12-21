@@ -2,20 +2,21 @@ import { Router } from "express";
 import {
   addProject,
   deleteProject,
+  getProject,
   getProjects,
   updateProject,
 } from "../controllers/projectsContoller";
-import { addProjectSchema } from "../schemas/projects/addProjectSchema";
-import { validateBody } from "../utils/validate";
 
 const router = Router();
 
-router.post("/", validateBody(addProjectSchema), addProject);
+router.post("/", addProject);
 
-router.get("/:id", getProjects);
+router.get("/", getProjects);
 
 router.delete("/:id", deleteProject);
 
 router.put("/:id", updateProject);
+
+router.get("/:id", getProject);
 
 export default router;

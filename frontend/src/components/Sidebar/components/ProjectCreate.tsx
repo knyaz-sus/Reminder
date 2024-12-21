@@ -14,7 +14,7 @@ import { Plus } from "lucide-react";
 import { addProject } from "@/api/addProject";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useAddOptimistic } from "@/hooks/useAddOptimistic";
-import { Project } from "@/types/schema";
+import { Project } from "@/types/schemas";
 
 export function ProjectCreate() {
   const { session } = useAuth();

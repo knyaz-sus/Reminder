@@ -10,11 +10,13 @@ export const useUpdateOptimistic = <T extends { id: string }>({
   queryKey,
   id,
   updateList,
+  onSettledCallback,
 }: {
   mutationFn: MutationFunction<T>;
   queryKey: QueryKey;
   id: string;
   updateList: Partial<T>;
+  onSettledCallback?: () => void;
 }) => {
   const queryClient = useQueryClient();
   const updateMutation = useMutation({
@@ -49,6 +51,7 @@ export const useUpdateOptimistic = <T extends { id: string }>({
       queryClient.invalidateQueries({
         queryKey,
       });
+      if (onSettledCallback) onSettledCallback();
     },
   });
   return updateMutation;

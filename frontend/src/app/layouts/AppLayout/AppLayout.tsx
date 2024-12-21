@@ -9,10 +9,10 @@ export function AppLayout() {
       <AppSidebar />
       <div
         className="flex flex-auto flex-col 
-                   min-h-screen pl-6 pt-3 pb-3 pr-6"
+                   min-h-screen px-6 py-3"
       >
         <AppHeader />
-        <main className="flex justify-center">
+        <main className="flex justify-center px-10">
           <div className="flex flex-col flex-auto max-w-3xl">
             <Outlet />
           </div>
