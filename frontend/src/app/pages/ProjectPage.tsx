@@ -53,7 +53,7 @@ export function ProjectPage() {
         <CreateTask toggleCreating={toggleCreating} />
       ) : (
         <>
-          <Separator />
+          {tasks?.length === 0 && <Separator />}
           <Button
             onClick={toggleCreating}
             className="justify-start pl-0 text-foreground/60 hover:bg-inherit hover:text-foreground"

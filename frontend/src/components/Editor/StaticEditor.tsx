@@ -12,6 +12,6 @@ export function StaticEditor({ content }: EditorProps) {
     editable: false,
     content,
   });
-  if (!editor || editor.isEmpty) return null;
-  return <EditorContent editor={editor} className="text-sm" />;
+
+  return <EditorContent editor={editor} className="flex-auto text-sm" />;
 }

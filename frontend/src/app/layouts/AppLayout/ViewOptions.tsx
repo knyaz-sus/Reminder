@@ -5,13 +5,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/DropdownMenu";
+import { cn } from "@/lib/cn";
 import { Layers } from "lucide-react";
 
-export function ViewOptions() {
+interface ViewOptionsProps {
+  triggerClassName?: string;
+}
+
+export function ViewOptions({ triggerClassName }: ViewOptionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-7 w-7">
+        <Button variant="ghost" className={cn("h-7 w-7", triggerClassName)}>
           <Layers />
           <span className="sr-only">View options</span>
         </Button>

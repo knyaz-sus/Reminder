@@ -7,17 +7,12 @@ export function AppLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div
-        className="flex flex-auto flex-col 
-                   min-h-screen px-6 py-3"
-      >
-        <AppHeader />
-        <main className="flex justify-center px-10">
-          <div className="flex flex-col flex-auto max-w-3xl">
-            <Outlet />
-          </div>
-        </main>
-      </div>
+      <AppHeader />
+      <main className="flex justify-center px-10 pb-6 pt-20 flex-auto">
+        <div className="flex flex-col flex-auto max-w-3xl">
+          <Outlet />
+        </div>
+      </main>
     </SidebarProvider>
   );
 }

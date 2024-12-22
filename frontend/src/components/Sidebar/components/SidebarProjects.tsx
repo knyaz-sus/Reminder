@@ -51,7 +51,9 @@ export function SidebarProjects() {
             {isError && <div>Can't get projects</div>}
             {!!projects &&
               (projects.length === 0 ? (
-                <div>You don't have any projects</div>
+                <div className="text-center p-4">
+                  You don't have any projects
+                </div>
               ) : (
                 projects.map((project) => {
                   const { id, adminId, name } = project;
