@@ -11,7 +11,6 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noImplicitAny": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
@@ -25,6 +24,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "env.d.ts", "vitest-setup.ts", "vitest/globals", "src/test", "../backend/src/routes/types/schema.ts"],
+  "include": [
+    "src",
+    "env.d.ts",
+    "vitest-setup.ts",
+    "vitest/globals",
+    "src/test",
+    "../backend/src/routes/types/schema.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

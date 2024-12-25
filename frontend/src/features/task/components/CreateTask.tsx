@@ -10,15 +10,26 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 export function CreateTask({ toggleCreating }: { toggleCreating: () => void }) {
+  const { id } = useParams();
   const [title, setTitle] = useState("<p></p>");
   const [description, setDescription] = useState("<p></p>");
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const { session } = useAuth();
-  const { id } = useParams();
   const createTaskMutation = useAddOptimistic<Task>({
-    mutationFn: () => addTask(session?.access_token, id, title, description),
-    queryKey: ["user-tasks", { session }, id],
+    mutationFn: () => {
+      console.log(id);
+      return addTask(
+        session?.access_token,
+        id,
+        title,
+        description,
+        date?.toISOString()
+      );
+    },
+    queryKey: ["user-tasks", id, session?.access_token],
     newEntity: { title, description, date: null },
   });
+
   return (
     <div
       className="flex flex-col justify-center px-3 pt-3
@@ -40,7 +51,7 @@ export function CreateTask({ toggleCreating }: { toggleCreating: () => void }) {
       </div>
       <Separator />
       <div className="flex items-center justify-between py-2 gap-2">
-        <DatePicker />
+        <DatePicker controlledDate={date} setControlledDate={setDate} />
         <div className="flex items-center gap-2">
           <Button
             onClick={toggleCreating}
@@ -57,6 +68,7 @@ export function CreateTask({ toggleCreating }: { toggleCreating: () => void }) {
             }}
             className="text-xs"
             size="sm"
+            disabled={title === "<p></p>"}
           >
             Add task
           </Button>

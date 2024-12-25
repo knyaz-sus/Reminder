@@ -20,7 +20,7 @@
   h4,
   h5,
   h6 {
-    @apply tracking-tight text-2xl font-bold;
+    @apply tracking-tight text-3xl font-bold;
   }
   :root {
     --background: 0 0% 100%;
@@ -180,4 +180,7 @@
 div.ProseMirror-focused {
   outline: none;
   border: none;
+}
+div.ProseMirror {
+  word-wrap: wrap;
 }

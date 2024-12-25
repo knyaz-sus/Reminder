@@ -1,6 +1,9 @@
 import { Context, useContext } from "react";
 
 export const useContextTyped = <T>(context: Context<T>) => {
-  if (!context) throw new Error("Can't access context");
-  return useContext<T>(context);
+  const value = useContext<T>(context);
+  if (!value) {
+    throw new Error("useSidebar must be used within a SidebarProvider.");
+  }
+  return value;
 };

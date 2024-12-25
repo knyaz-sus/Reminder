@@ -41,6 +41,7 @@ export const addTaskRequestSchema = z.object({
     projectId: z.string().uuid(),
     description: z.string().optional().nullable(),
     date: z.string().optional(),
+    priority: z.number().int().optional(),
   }),
 });
 
@@ -50,6 +51,25 @@ export const getTasksRequestSchema = z.object({
   }),
 });
 
+export const deleteTaskRequestSchema = z.object({
+  params: z.object({
+    id: z.string().uuid(),
+  }),
+});
+
+export const updateTaskRequestHandelr = z.object({
+  body: z.object({
+    title: z.string().optional(),
+    description: z.string().optional().nullable(),
+    date: z.string().nullable().optional(),
+    isDone: z.boolean().optional(),
+    updatedAt: z.string().optional(),
+    priority: z.number().int().optional(),
+  }),
+  params: z.object({
+    id: z.string().uuid(),
+  }),
+});
 /////////////////////////////////////////////////////////////////////
 
 export const getUserRequestSchema = z.object({

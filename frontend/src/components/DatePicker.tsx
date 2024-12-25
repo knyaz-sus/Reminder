@@ -6,31 +6,43 @@ import { Button } from "@/components/Button";
 import { Calendar } from "@/components/Calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/Popover";
 
-export function DatePicker() {
+export function DatePicker({
+  controlledDate,
+  setControlledDate,
+}: {
+  controlledDate?: Date;
+  setControlledDate?: (date: Date | undefined) => void;
+}) {
   const [date, setDate] = useState<Date>();
   const [isOpen, setIsOpen] = useState(false);
+  const getDayString = () => {
+    if (controlledDate) return format(controlledDate, "PPP");
+    else if (date) format(date, "PPP");
+    return "Pick a date";
+  };
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           className={cn(
-            "text-xs justify-start text-left font-normal",
-            !date && "text-muted-foreground"
+            "text-xs justify-start text-left font-normal overflow-hidden",
+            !controlledDate && !date && "text-muted-foreground"
           )}
         >
           <CalendarIcon />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          <span>{getDayString()}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent side="right" alignOffset={5} className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={date}
+          selected={controlledDate ? controlledDate : date}
           onSelect={(day) => {
             setIsOpen(false);
-            setDate(day);
+            if (setControlledDate) setControlledDate(day);
+            else setDate(day);
           }}
           initialFocus
         />

@@ -5,7 +5,7 @@ import { Placeholder } from "@tiptap/extension-placeholder";
 import { Underline } from "@tiptap/extension-underline";
 
 interface RichEditorProps {
-  content: string;
+  content?: string;
   handleSave: (arg: string) => void;
   placeholder: string;
   autofocus?: FocusPosition;
@@ -23,7 +23,6 @@ export function RichEditor({
     onUpdate(editor) {
       handleSave(editor.editor.getHTML());
     },
-
     autofocus,
   });
   if (!editor) return null;

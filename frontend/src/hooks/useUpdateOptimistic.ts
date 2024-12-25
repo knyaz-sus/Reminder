@@ -48,6 +48,7 @@ export const useUpdateOptimistic = <T extends { id: string }>({
       }
     },
     onSettled: () => {
+      console.log(queryKey);
       queryClient.invalidateQueries({
         queryKey,
       });

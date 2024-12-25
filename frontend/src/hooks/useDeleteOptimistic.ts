@@ -36,6 +36,7 @@ export const useDeleteOptimistic = <T extends { id: string }>({
       }
     },
     onSettled: () => {
+      console.log(queryKey);
       queryClient.invalidateQueries({
         queryKey,
       });

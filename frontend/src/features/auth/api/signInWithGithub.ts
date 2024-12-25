@@ -6,7 +6,7 @@ export const signInWithGithub = async () => {
     options: {
       redirectTo: `${
         import.meta.env.DEV
-          ? "http//localhost:5173"
+          ? "http//localhost:5173/"
           : "https://reminder-navy.vercel.app/"
       }/app`,
     },

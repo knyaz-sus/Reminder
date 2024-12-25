@@ -9,10 +9,11 @@ export function AppHeader() {
     <header className="flex fixed w-full justify-between h-[52px] z-[2] bg-background">
       <SidebarTrigger
         className={cn(
-          "absolute left-[1.5rem] top-3 transition-all ease-linear duration-200",
+          "absolute left-[1.5rem] top-3  ease-linear duration-200",
           {
-            "left-[17.5rem]": isOpen,
-            "left-6": isMobile,
+            "left-[17.5rem]": isOpen && !isMobile,
+
+            "transition-all": !isMobile,
           }
         )}
       />

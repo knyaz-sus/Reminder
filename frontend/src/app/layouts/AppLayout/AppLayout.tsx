@@ -8,8 +8,8 @@ export function AppLayout() {
     <SidebarProvider>
       <AppSidebar />
       <AppHeader />
-      <main className="flex justify-center px-10 pb-6 pt-20 flex-auto">
-        <div className="flex flex-col flex-auto max-w-3xl">
+      <main className="flex justify-center pb-6 pt-16 flex-auto ">
+        <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">
           <Outlet />
         </div>
       </main>

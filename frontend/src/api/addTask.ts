@@ -6,7 +6,7 @@ export const addTask = async (
   date?: string
 ) => {
   try {
-    if (!title || !accToken) return;
+    if (!title || !accToken || !projectId) return;
     const res = await fetch(`${import.meta.env.VITE_API_URL}/tasks`, {
       method: "POST",
       headers: {
