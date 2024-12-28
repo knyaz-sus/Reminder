@@ -25,7 +25,6 @@ type UpdateTaskModalProps = {
   open: boolean;
   onOpenChange: (arg: boolean) => void;
   deleteHandler: UseMutateFunction<Task, Error, unknown, { previous: Task[] }>;
-  priority: number;
 };
 
 export function UpdateTaskModal({
@@ -35,21 +34,25 @@ export function UpdateTaskModal({
 }: UpdateTaskModalProps) {
   const { session } = useAuth();
   const taskState = useTaskState();
-  const { title, description, projectName, date, id, projectId } = taskState;
+  const { title, description, projectName, date, id, projectId, priority } =
+    taskState;
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDescription, setUpdatedDescription] = useState(description);
   const [controlledDate, setControlledDate] = useState<Date | undefined>(date);
+  const [updatedPriority, setUpdatedPriority] = useState(priority);
   const updateTaskMutation = useUpdateOptimistic({
-    mutationFn: () =>
-      updateTask({
+    mutationFn: () => {
+      return updateTask({
         id,
         updatedProperties: {
           title: updatedTitle,
           description: updatedDescription,
           date: controlledDate?.toISOString(),
+          priority: updatedPriority,
         },
         accToken: session?.access_token,
-      }),
+      });
+    },
     queryKey: ["user-tasks", projectId, session?.access_token],
     id,
     updateList: { title: updatedTitle, description: updatedDescription },
@@ -57,8 +60,12 @@ export function UpdateTaskModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        customClose
+        onInteractOutside={() => {
+          setUpdatedPriority(priority);
+          setControlledDate(date);
+        }}
         className="gap-0 items-center p-0 md:max-w-3xl w-full"
+        customClose
       >
         <DialogHeader className="flex items-center flex-row py-2 pr-3 pl-2">
           <Button
@@ -123,7 +130,10 @@ export function UpdateTaskModal({
             <Separator />
             <div className="flex flex-col gap-1">
               <span className="text-xs text-foreground/80">Priority</span>
-              <PrioritySelect />
+              <PrioritySelect
+                priority={updatedPriority}
+                onSelectChange={setUpdatedPriority}
+              />
             </div>
             <Button
               size="sm"

@@ -65,7 +65,7 @@ export type Database = {
           description: string | null;
           id: string;
           isDone: boolean;
-          priority: number;
+          priority: string;
           projectId: string | null;
           title: string;
           updatedAt: string;
@@ -76,7 +76,7 @@ export type Database = {
           description?: string | null;
           id?: string;
           isDone?: boolean;
-          priority?: number;
+          priority?: string;
           projectId?: string | null;
           title: string;
           updatedAt?: string;
@@ -87,7 +87,7 @@ export type Database = {
           description?: string | null;
           id?: string;
           isDone?: boolean;
-          priority?: number;
+          priority?: string;
           projectId?: string | null;
           title?: string;
           updatedAt?: string;

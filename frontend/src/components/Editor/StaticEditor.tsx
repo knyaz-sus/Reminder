@@ -2,12 +2,14 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Underline } from "@tiptap/extension-underline";
 import { useEffect } from "react";
+import { cn } from "@/lib/cn";
 
 interface EditorProps {
   content?: string;
+  className?: string;
 }
 
-export function StaticEditor({ content }: EditorProps) {
+export function StaticEditor({ content, className }: EditorProps) {
   const editor = useEditor({
     extensions: [StarterKit, Underline],
     editable: false,
@@ -15,7 +17,6 @@ export function StaticEditor({ content }: EditorProps) {
   });
   useEffect(() => {
     if (editor && content !== editor.getHTML()) {
-      console.log("Данные обновились в эдиторах статичных", content);
       editor.commands.setContent(content || "");
     }
     console.log("Стейт едитора", editor?.getHTML());
@@ -23,7 +24,10 @@ export function StaticEditor({ content }: EditorProps) {
 
   return (
     <div>
-      <EditorContent editor={editor} className="flex-auto text-sm" />
+      <EditorContent
+        editor={editor}
+        className={cn("flex-auto text-sm", className)}
+      />
     </div>
   );
 }

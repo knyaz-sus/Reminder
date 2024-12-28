@@ -8,12 +8,15 @@ import { useAddOptimistic } from "@/hooks/useAddOptimistic";
 import { Task } from "@/types/schemas";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { PrioritySelect } from "./PrioritySelect";
+import { priorities } from "@/constants/ui";
 
 export function CreateTask({ toggleCreating }: { toggleCreating: () => void }) {
   const { id } = useParams();
   const [title, setTitle] = useState("<p></p>");
   const [description, setDescription] = useState("<p></p>");
   const [date, setDate] = useState<Date | undefined>(undefined);
+  const [priority, setPriority] = useState<(typeof priorities)[number]>("4");
   const { session } = useAuth();
   const createTaskMutation = useAddOptimistic<Task>({
     mutationFn: () => {
@@ -51,7 +54,10 @@ export function CreateTask({ toggleCreating }: { toggleCreating: () => void }) {
       </div>
       <Separator />
       <div className="flex items-center justify-between py-2 gap-2">
-        <DatePicker controlledDate={date} setControlledDate={setDate} />
+        <div className="flex gap-2">
+          <DatePicker controlledDate={date} setControlledDate={setDate} />
+          <PrioritySelect priority={priority} onSelectChange={setPriority} />
+        </div>
         <div className="flex items-center gap-2">
           <Button
             onClick={toggleCreating}

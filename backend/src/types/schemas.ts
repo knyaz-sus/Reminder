@@ -41,7 +41,7 @@ export const addTaskRequestSchema = z.object({
     projectId: z.string().uuid(),
     description: z.string().optional().nullable(),
     date: z.string().optional(),
-    priority: z.number().int().optional(),
+    priority: z.enum(["1", "2", "3", "4"]).optional(),
   }),
 });
 
@@ -64,7 +64,7 @@ export const updateTaskRequestHandelr = z.object({
     date: z.string().nullable().optional(),
     isDone: z.boolean().optional(),
     updatedAt: z.string().optional(),
-    priority: z.number().int().optional(),
+    priority: z.enum(["1", "2", "3", "4"]).optional(),
   }),
   params: z.object({
     id: z.string().uuid(),

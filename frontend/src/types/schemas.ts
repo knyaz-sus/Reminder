@@ -26,7 +26,7 @@ export const taskSchema = z.object({
   isDone: z.boolean(),
   projectId: z.string().uuid(),
   updatedAt: z.string(),
-  priority: z.number().int(),
+  priority: z.enum(["1", "2", "3", "4"]),
   createdAt: z.string(),
 });
 export const tasksSchema = z.array(taskSchema);

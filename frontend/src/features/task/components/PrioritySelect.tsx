@@ -1,40 +1,48 @@
 import { Button } from "@/components/Button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/Popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/Select";
 import { priorities } from "@/constants/ui";
-import { useTaskState } from "@/hooks/useTaskState";
 import { Flag } from "lucide-react";
 import { useState } from "react";
 
-export function PrioritySelect() {
-  const [open, setOpen] = useState(false);
-  const { priority } = useTaskState();
+interface PrioritySelectProps {
+  priority: (typeof priorities)[number];
+  onSelectChange: (arg: (typeof priorities)[number]) => void;
+}
+
+export function PrioritySelect({
+  priority,
+  onSelectChange,
+}: PrioritySelectProps) {
+  const [open, onOpenChange] = useState(false);
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-xs justify-start text-left font-normal"
+    <Select
+      open={open}
+      onOpenChange={onOpenChange}
+      value={`${priority}`}
+      onValueChange={onSelectChange}
+    >
+      <SelectTrigger className="h-9 bg-inherit hover:bg-accent hover:text-accent-foreground border-none text-xs">
+        <button
+          onClick={() => onOpenChange(true)}
+          className="flex gap-2 items-center rounded-md px-3 "
         >
-          <Flag />
-          <span>P{priority}</span>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent alignOffset={5} className="w-auto p-0">
-        <ul className="flex flex-col rounded-xl bg-background">
-          {priorities.map((priority) => (
-            <li key={priority}>
-              <button
-                className="flex gap-2 py-2 px-3 text-sm items-center"
-                onClick={() => setOpen(false)}
-              >
-                <Flag size={18} />
-                <span>Priority {priority}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </PopoverContent>
-    </Popover>
+          <Flag size={17} />
+          <SelectValue />
+        </button>
+      </SelectTrigger>
+      <SelectContent>
+        {priorities.map((el) => (
+          <SelectItem key={el} value={`${el}`}>
+            <span>Priority {el}</span>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

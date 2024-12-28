@@ -27,7 +27,7 @@ export function DatePicker({
           variant="ghost"
           size="sm"
           className={cn(
-            "text-xs justify-start text-left font-normal overflow-hidden",
+            "text-xs justify-start text-left font-normal",
             !controlledDate && !date && "text-muted-foreground"
           )}
         >
