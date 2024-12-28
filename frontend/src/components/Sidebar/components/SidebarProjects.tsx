@@ -11,6 +11,7 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ProjectCreate } from "./ProjectCreate";
 import { SidebarProject } from "./SidebarProject";
 import { useLocation } from "react-router-dom";
+
 export function SidebarProjects() {
   const location = useLocation();
   const { session } = useAuth();
@@ -24,7 +25,6 @@ export function SidebarProjects() {
       queryFn: () => fetchProjects(session?.user.id, session?.access_token),
     })
   );
-
   return (
     <SidebarGroup>
       <SidebarGroupContent>

@@ -14,6 +14,7 @@ export const projectSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1),
   updatedAt: z.string(),
+  createdAt: z.string(),
 });
 export const projectsSchema = z.array(projectSchema);
 
@@ -26,6 +27,7 @@ export const taskSchema = z.object({
   projectId: z.string().uuid(),
   updatedAt: z.string(),
   priority: z.number().int(),
+  createdAt: z.string(),
 });
 export const tasksSchema = z.array(taskSchema);
 

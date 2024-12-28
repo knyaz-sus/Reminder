@@ -40,7 +40,8 @@ export const getProjects = async (req: Request, res: Response) => {
     const { data: projects, error } = await supabase
       .from("projects")
       .select("*")
-      .eq("adminId", userId);
+      .eq("adminId", userId)
+      .order("createdAt", { ascending: true });
     if (error) {
       console.log(error.message);
       return res

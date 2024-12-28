@@ -39,7 +39,8 @@ export const getTasks = async (req: Request, res: Response) => {
     const { data: tasks, error } = await supabase
       .from("tasks")
       .select("*")
-      .eq("projectId", projectId);
+      .eq("projectId", projectId)
+      .order("createdAt", { ascending: true });
     if (error) {
       console.log(error.message);
       return res.status(500).json({
@@ -47,6 +48,7 @@ export const getTasks = async (req: Request, res: Response) => {
         error: error.message,
       });
     }
+    console.log(tasks);
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });

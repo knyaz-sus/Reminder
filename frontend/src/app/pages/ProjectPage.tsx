@@ -2,14 +2,13 @@ import { Button } from "@/components/Button";
 import { CreateTask } from "@/features/task/components/CreateTask";
 import { Separator } from "@/components/Separator";
 import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchTasks } from "@/api/fetchTasks";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useParams } from "react-router-dom";
 import { fetchProject } from "@/api/fetchProject";
-import { Task } from "@/features/task/components/Task";
-import { TaskState, TaskStateProvider } from "@/context/TaskStateProvider";
+import { ProjectTasks } from "@/features/task/components/ProjectTasks";
 
 export function ProjectPage() {
   const { id } = useParams();
@@ -28,9 +27,6 @@ export function ProjectPage() {
     queryFn: () => fetchProject(id, session?.access_token),
     queryKey: ["projectId", id],
   });
-  useEffect(() => {
-    console.log("Данные обновились в ProjectPage", tasks);
-  }, [tasks]);
   const toggleCreating = () => setIsCreating((prev) => !prev);
   if (isError) {
     return (
@@ -48,20 +44,7 @@ export function ProjectPage() {
   return (
     <>
       <h1 className="mb-4">{project?.name}</h1>
-      <div className="flex flex-col gap-2 mb-2">
-        {tasks?.map((task) => {
-          const taskState: TaskState = {
-            ...task,
-            projectName: project?.name,
-            date: task.date ? new Date(task.date) : undefined,
-          };
-          return (
-            <TaskStateProvider key={task.id} {...taskState}>
-              <Task />
-            </TaskStateProvider>
-          );
-        })}
-      </div>
+      <ProjectTasks tasks={tasks} projectName={project?.name} />
       {isCreating ? (
         <CreateTask toggleCreating={toggleCreating} />
       ) : (
