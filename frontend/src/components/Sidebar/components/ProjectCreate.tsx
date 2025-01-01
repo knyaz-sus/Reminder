@@ -56,16 +56,15 @@ export function ProjectCreate() {
               Close
             </Button>
           </DialogClose>
-          <Button
-            onClick={() => {
-              addProjectMutation.mutate(session?.user.id);
-              setOpen(false);
-            }}
-            size="sm"
-            disabled={projectName === ""}
-          >
-            Confirm
-          </Button>
+          <DialogTrigger asChild>
+            <Button
+              onClick={addProjectMutation.mutate}
+              size="sm"
+              disabled={projectName === ""}
+            >
+              Confirm
+            </Button>
+          </DialogTrigger>
         </DialogFooter>
       </DialogContent>
     </Dialog>

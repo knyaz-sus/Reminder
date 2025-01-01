@@ -25,11 +25,12 @@ export function RichEditor({
     },
     autofocus,
   });
-  if (!editor) return null;
   return (
-    <>
-      <EditorContent editor={editor} className="text-sm" />
-      <BubbleMenuEditor editor={editor} />
-    </>
+    !!editor && (
+      <div>
+        <EditorContent editor={editor} className="text-sm" />
+        <BubbleMenuEditor editor={editor} />
+      </div>
+    )
   );
 }

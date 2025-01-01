@@ -30,6 +30,7 @@ import { updateProject } from "@/api/updateProject";
 import { Project } from "@/types/schemas";
 import { useUpdateOptimistic } from "@/hooks/useUpdateOptimistic";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/cn";
 
 interface SidebarProjectProps {
   id: string;
@@ -84,10 +85,13 @@ export function SidebarProject({
           }}
         >
           <DropdownMenu>
-            <DropdownMenuTrigger asChild className={styles.child}>
-              <button className="[&>svg]:size-4 [&>svg]:shrink-0 p-1 hover:text-sidebar-foreground">
-                <Ellipsis />
-              </button>
+            <DropdownMenuTrigger
+              className={cn(
+                "[&>svg]:size-4 [&>svg]:shrink-0 p-1 hover:text-sidebar-foreground/80",
+                styles.child
+              )}
+            >
+              <Ellipsis />
             </DropdownMenuTrigger>
             <DropdownMenuPortal>
               <DropdownMenuContent>

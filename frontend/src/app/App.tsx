@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import { AuthLayout } from "./layouts/AuthLayout/AuthLayout";
-import { AppTodayPage } from "./pages/AppTodayPage";
+import { TodayPage } from "./pages/TodayPage";
 import { AppLayout } from "./layouts/AppLayout/AppLayout";
 import ProtectedRoute from "@/features/auth/components/ProtectedRoute";
 import { SignInForm } from "@/features/auth/components/SignInForm";
@@ -41,7 +41,7 @@ export function App() {
         <Route path="/app/done" element={<DonePage />} />
         <Route path="/app/inbox" element={<InboxPage />} />
         <Route path="/app/upcoming" element={<UpcomingPage />} />
-        <Route path="/app/today" element={<AppTodayPage />} />
+        <Route path="/app/today" element={<TodayPage />} />
         <Route path="/app/projects/:id" element={<ProjectPage />} />
         <Route path="/app/*" element={<Navigate to="today" replace />} />
       </Route>

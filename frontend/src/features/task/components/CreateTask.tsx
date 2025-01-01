@@ -19,16 +19,14 @@ export function CreateTask({ toggleCreating }: { toggleCreating: () => void }) {
   const [priority, setPriority] = useState<(typeof priorities)[number]>("4");
   const { session } = useAuth();
   const createTaskMutation = useAddOptimistic<Task>({
-    mutationFn: () => {
-      console.log(id);
-      return addTask(
+    mutationFn: () =>
+      addTask(
         session?.access_token,
         id,
         title,
         description,
         date?.toISOString()
-      );
-    },
+      ),
     queryKey: ["user-tasks", id, session?.access_token],
     newEntity: { title, description, date: null },
   });

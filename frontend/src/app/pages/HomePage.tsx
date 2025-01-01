@@ -5,10 +5,10 @@ export function HomePage() {
   return (
     <div>
       <h1>home</h1>
-      <Button>
+      <Button asChild>
         <Link to="/auth"> Auth</Link>
       </Button>
-      <Button>
+      <Button asChild>
         <Link to="/app">App</Link>
       </Button>
     </div>

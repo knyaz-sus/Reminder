@@ -1,4 +1,4 @@
-export function AppTodayPage() {
+export function TodayPage() {
   return (
     <div>
       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugiat iure

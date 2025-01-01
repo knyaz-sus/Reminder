@@ -23,7 +23,7 @@ export function ProjectPage() {
     queryFn: () => fetchTasks(id, session?.access_token),
     queryKey: ["user-tasks", id, session?.access_token],
   });
-  const { data: project } = useQuery({
+  const { data: project, isLoading: isProjectLoading } = useQuery({
     queryFn: () => fetchProject(id, session?.access_token),
     queryKey: ["projectId", id],
   });
@@ -38,7 +38,7 @@ export function ProjectPage() {
       </div>
     );
   }
-  if (isLoading) {
+  if (isLoading || isProjectLoading) {
     return <div className="flex items-center justify-center">Loading...</div>;
   }
   return (

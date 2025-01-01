@@ -1,9 +1,9 @@
 import { Toggle } from "@/components/Toggle";
 import { Bold, Italic, Underline } from "lucide-react";
 import { BubbleMenu, Editor } from "@tiptap/react";
+
 export function BubbleMenuEditor({ editor }: { editor: Editor }) {
   return (
-    <div>
       <BubbleMenu
         className="bg-background border-thin rounded-xl border-border shadow"
         updateDelay={100}
@@ -37,6 +37,5 @@ export function BubbleMenuEditor({ editor }: { editor: Editor }) {
           <Underline />
         </Toggle>
       </BubbleMenu>
-    </div>
   );
 }

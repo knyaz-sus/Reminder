@@ -19,7 +19,6 @@ export function StaticEditor({ content, className }: EditorProps) {
     if (editor && content !== editor.getHTML()) {
       editor.commands.setContent(content || "");
     }
-    console.log("Стейт едитора", editor?.getHTML());
   }, [content, editor]);
 
   return (

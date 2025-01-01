@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 
 export function SidebarProjects() {
   const location = useLocation();
-  const { session } = useAuth();
+  const { session, isAuthLoading } = useAuth();
   const {
     data: projects,
     isPending,
@@ -23,6 +23,7 @@ export function SidebarProjects() {
     queryOptions({
       queryKey: ["user-projects", { session }],
       queryFn: () => fetchProjects(session?.user.id, session?.access_token),
+      enabled: !!session?.user && !isAuthLoading,
     })
   );
   return (

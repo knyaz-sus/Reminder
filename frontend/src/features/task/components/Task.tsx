@@ -13,13 +13,13 @@ import { TaskCheck } from "./TaskCheck";
 export function Task() {
   const { session } = useAuth();
   const taskState = useTaskState();
+  const [open, setOpen] = useState(false);
   const { id, projectId, title, description, priority, date } = taskState;
   const deleteTaskMutation = useDeleteOptimistic({
     mutationFn: () => deleteTask(id, session?.access_token),
     queryKey: ["user-tasks", projectId, session?.access_token],
     id,
   });
-  const [open, setOpen] = useState(false);
   return (
     <>
       <div className="flex relative cursor-pointer group flex-col">

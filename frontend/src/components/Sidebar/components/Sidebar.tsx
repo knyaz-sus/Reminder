@@ -6,7 +6,12 @@ import { cn } from "@/lib/cn";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Separator } from "@/components/Separator";
-import { Sheet, SheetContent } from "@/components/Sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+} from "@/components/Sheet";
 import { Skeleton } from "@/components/Skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/Tooltip";
 import { useSidebar } from "@/hooks/useSideBar";
@@ -63,6 +68,10 @@ const Sidebar = React.forwardRef<
             }
             side={side}
           >
+            <SheetTitle className="sr-only">Sidebar</SheetTitle>
+            <SheetDescription className="sr-only">
+              App navigation
+            </SheetDescription>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
         </Sheet>

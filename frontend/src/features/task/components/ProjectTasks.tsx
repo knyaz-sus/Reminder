@@ -15,7 +15,6 @@ export function ProjectTasks({ tasks, projectName }: ProjectTasksProps) {
           return Number(new Date(a.createdAt)) - Number(new Date(b.createdAt));
         })
         .map((task) => {
-          console.log(task.title, Number(new Date(task.createdAt)));
           const taskState: TaskState = {
             ...task,
             projectName,

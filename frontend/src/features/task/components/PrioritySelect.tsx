@@ -1,4 +1,3 @@
-import { Button } from "@/components/Button";
 import {
   Select,
   SelectContent,
@@ -27,7 +26,10 @@ export function PrioritySelect({
       value={`${priority}`}
       onValueChange={onSelectChange}
     >
-      <SelectTrigger className="h-9 bg-inherit hover:bg-accent hover:text-accent-foreground border-none text-xs">
+      <SelectTrigger
+        asChild
+        className="h-9 bg-inherit hover:bg-accent hover:text-accent-foreground border-none text-xs"
+      >
         <button
           onClick={() => onOpenChange(true)}
           className="flex gap-2 items-center rounded-md px-3 "

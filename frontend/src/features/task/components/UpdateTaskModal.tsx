@@ -41,8 +41,8 @@ export function UpdateTaskModal({
   const [controlledDate, setControlledDate] = useState<Date | undefined>(date);
   const [updatedPriority, setUpdatedPriority] = useState(priority);
   const updateTaskMutation = useUpdateOptimistic({
-    mutationFn: () => {
-      return updateTask({
+    mutationFn: () =>
+      updateTask({
         id,
         updatedProperties: {
           title: updatedTitle,
@@ -51,8 +51,7 @@ export function UpdateTaskModal({
           priority: updatedPriority,
         },
         accToken: session?.access_token,
-      });
-    },
+      }),
     queryKey: ["user-tasks", projectId, session?.access_token],
     id,
     updateList: { title: updatedTitle, description: updatedDescription },
