@@ -1,16 +1,16 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { HomePage } from "./pages/HomePage";
-import { AuthLayout } from "./layouts/AuthLayout/AuthLayout";
-import { TodayPage } from "./pages/TodayPage";
-import { AppLayout } from "./layouts/AppLayout/AppLayout";
-import ProtectedRoute from "@/features/auth/components/ProtectedRoute";
-import { SignInForm } from "@/features/auth/components/SignInForm";
-import { SignUpForm } from "@/features/auth/components/SignUpForm";
-import { NotFoundPage } from "./pages/NotFoundPage";
-import { InboxPage } from "./pages/InboxPage";
-import { UpcomingPage } from "./pages/UpcomingPage";
-import { DonePage } from "./pages/DonePage";
-import { ProjectPage } from "./pages/ProjectPage";
+import { HomePage } from "./pages/home-page";
+import { AuthLayout } from "./layouts/auth-layout/auth-layout";
+import { TodayPage } from "./pages/today-page";
+import { AppLayout } from "./layouts/app-layout/app-layout";
+import ProtectedRoute from "@/modules/auth/components/protected-route";
+import { SignInForm } from "@/modules/auth/components/sign-in-form";
+import { SignUpForm } from "@/modules/auth/components/sign-up-form";
+import { ErrorPage } from "./pages/error-page";
+import { InboxPage } from "./pages/inbox-page";
+import { UpcomingPage } from "./pages/upcoming-page";
+import { DonePage } from "./pages/done-page";
+import { ProjectPage } from "./pages/project-page";
 
 export function App() {
   return (
@@ -45,7 +45,7 @@ export function App() {
         <Route path="/app/projects/:id" element={<ProjectPage />} />
         <Route path="/app/*" element={<Navigate to="today" replace />} />
       </Route>
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 }

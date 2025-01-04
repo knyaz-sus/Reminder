@@ -2,7 +2,7 @@ import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
 import { cn } from "@/lib/cn";
 import { VariantProps } from "class-variance-authority";
-import { toggleVariants } from "@/components/variants/toggleVariants";
+import { toggleVariants } from "@/components/variants/toggle-variants";
 
 type ToggleProps = {
   pressed: boolean;
