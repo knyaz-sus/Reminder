@@ -14,13 +14,12 @@ export const getUser = async (req: Request, res: Response) => {
       .eq("id", userId)
       .single();
     if (error) {
-      console.log(error.message, userId);
       return res
         .status(500)
         .json({ message: "Error fetching user", error: error.message });
     }
-    res.status(200).json(user);
+    return res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };

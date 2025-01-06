@@ -1,17 +1,14 @@
 import { userRowSchema } from "@/types/schemas";
-import { fetchWithValidation } from "./fetch-with-validation";
+import { getWithValidation } from "./get-with-validation";
 import { queryOptions } from "@tanstack/react-query";
 
 export const userApi = {
-  getUserQueryOptions(
-    userId: string | undefined,
-    accToken: string | undefined
-  ) {
+  getUserQueryOptions(userId: string | undefined) {
     return queryOptions({
-      queryKey: ["user", accToken],
+      queryKey: ["user"],
       queryFn: () => {
         if (!userId) return;
-        return fetchWithValidation(`/users/${userId}`, accToken, userRowSchema);
+        return getWithValidation(`/users/${userId}`, userRowSchema);
       },
     });
   },

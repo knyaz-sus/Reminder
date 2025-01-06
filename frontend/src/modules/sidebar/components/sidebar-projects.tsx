@@ -22,7 +22,6 @@ export function SidebarProjects() {
   } = useQuery({
     ...projectApi.getAllProjectsQueryOptions(
       session?.user.id,
-      session?.access_token
     ),
     enabled: !!session?.user && !isAuthLoading,
   });

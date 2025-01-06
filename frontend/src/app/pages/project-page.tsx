@@ -21,7 +21,7 @@ export function ProjectPage() {
     isError: isTasksError,
     refetch,
   } = useQuery({
-    ...taskApi.getProjectTasksQueryOptions(id, session?.access_token),
+    ...taskApi.getProjectTasksQueryOptions(id),
     enabled: !!session && !isAuthLoading,
   });
 
@@ -30,7 +30,7 @@ export function ProjectPage() {
     isPending: isProjectPending,
     isError: isProjectError,
   } = useQuery({
-    ...projectApi.getProjectQueryOptions(id, session?.access_token),
+    ...projectApi.getProjectQueryOptions(id),
     enabled: !!session && !isAuthLoading,
   });
 
@@ -47,7 +47,7 @@ export function ProjectPage() {
     );
   }
   if (isTasksPending || isProjectPending) {
-    return <div className="flex items-center justify-center">Loading...</div>;
+    return <h1 className="flex items-center justify-center">Loading...</h1>;
   }
   return (
     <>

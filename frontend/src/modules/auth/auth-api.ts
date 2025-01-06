@@ -13,11 +13,7 @@ export const authApi = {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `${
-          import.meta.env.DEV
-            ? "http//localhost:5173/"
-            : "https://reminder-navy.vercel.app/"
-        }/app`,
+        redirectTo: `${import.meta.env.BASE_URL}/app`,
       },
     });
     if (error) throw error;

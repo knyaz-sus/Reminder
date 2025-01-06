@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { AnyZodObject, z, ZodError } from "zod";
+import { AnyZodObject, z } from "zod";
 
 export async function zParse<T extends AnyZodObject>(
   schema: T,
@@ -7,11 +7,8 @@ export async function zParse<T extends AnyZodObject>(
   res: Response
 ): Promise<z.infer<T>> {
   try {
-    return schema.parseAsync(req);
+    return await schema.parseAsync(req);
   } catch (error) {
-    if (error instanceof ZodError) {
-      throw error;
-    }
-    return res.status(400).json(JSON.stringify(error));
+    throw error;
   }
 }

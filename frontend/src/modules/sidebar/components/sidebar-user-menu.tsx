@@ -14,7 +14,7 @@ import {
 export function SidebarUserMenu() {
   const { session, isAuthLoading } = useAuth();
   const { data: user } = useQuery({
-    ...userApi.getUserQueryOptions(session?.user.id, session?.access_token),
+    ...userApi.getUserQueryOptions(session?.user.id),
     enabled: !!session?.user && !isAuthLoading,
   });
   return (

@@ -1,39 +1,26 @@
 import { Project, projectSchema, projectsSchema } from "@/types/schemas";
-import { fetchWithValidation } from "@/api/fetch-with-validation";
+import { getWithValidation } from "@/api/get-with-validation";
 import { queryOptions } from "@tanstack/react-query";
 
 export const projectApi = {
-  getProjectQueryOptions(
-    projectId: string | undefined,
-    accToken: string | undefined
-  ) {
+  baseKey: ["projects"],
+  getProjectQueryOptions(projectId: string | undefined) {
     return queryOptions({
       queryFn: () => {
         if (!projectId) return;
-        return fetchWithValidation(
-          `/projects/${projectId}`,
-          accToken,
-          projectSchema
-        );
+        return getWithValidation(`/projects/${projectId}`, projectSchema);
       },
-      queryKey: ["project", projectId],
+      queryKey: ["projects", projectId],
     });
   },
 
-  getAllProjectsQueryOptions(
-    userId: string | undefined,
-    accToken: string | undefined
-  ) {
+  getAllProjectsQueryOptions(userId: string | undefined) {
     return queryOptions({
       queryFn: () => {
         if (!userId) return;
-        return fetchWithValidation(
-          `/projects/?userId=${userId}`,
-          accToken,
-          projectsSchema
-        );
+        return getWithValidation(`/projects/?userId=${userId}`, projectsSchema);
       },
-      queryKey: ["projects", accToken],
+      queryKey: ["projects"],
     });
   },
 
@@ -51,15 +38,11 @@ export const projectApi = {
     return await res.json();
   },
 
-  async addProject(
-    project?: Partial<Project>,
-    accToken?: string,
-    currentUserId?: string
-  ) {
+  async addProject(project: Project, accToken: string | undefined) {
     try {
       if (!project) return;
       const { name } = project;
-      if (!name || !currentUserId || !accToken) return;
+      if (!name || !accToken) return;
       const res = await fetch(`${import.meta.env.VITE_API_URL}/projects`, {
         method: "POST",
         headers: {
@@ -67,7 +50,7 @@ export const projectApi = {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, userId: currentUserId }),
+        body: JSON.stringify({ name }),
       });
       console.log(await res.json());
     } catch (e) {

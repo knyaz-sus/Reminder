@@ -48,9 +48,9 @@ export const getProjects = async (req: Request, res: Response) => {
         .status(500)
         .json({ message: "Error fetching projects", error: error.message });
     }
-    res.status(200).json(projects);
+    return res.status(200).json(projects);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -121,8 +121,8 @@ export const getProject = async (req: Request, res: Response) => {
         .status(500)
         .json({ message: "Error fetching project", error: error.message });
     }
-    res.status(200).json(project);
+    return res.status(200).json(project);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };

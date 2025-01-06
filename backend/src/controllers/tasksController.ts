@@ -45,10 +45,8 @@ export const getTasks = async (req: Request, res: Response) => {
       console.log(error.message);
       return res.status(500).json({
         message: "Error fetching tasks by projectId",
-        error: error.message,
       });
     }
-    console.log(tasks);
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });

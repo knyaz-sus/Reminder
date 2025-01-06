@@ -1,21 +1,14 @@
 import { Task, tasksSchema } from "@/types/schemas";
-import { fetchWithValidation } from "@/api/fetch-with-validation";
+import { getWithValidation } from "@/api/get-with-validation";
 import { queryOptions } from "@tanstack/react-query";
 
 export const taskApi = {
-  getProjectTasksQueryOptions(
-    projectId: string | undefined,
-    accToken: string | undefined
-  ) {
+  getProjectTasksQueryOptions(projectId: string | undefined) {
     return queryOptions({
       queryKey: ["user-tasks", projectId],
       queryFn: () => {
         if (!projectId) return;
-        return fetchWithValidation(
-          `/tasks/?projectId=${projectId}`,
-          accToken,
-          tasksSchema
-        );
+        return getWithValidation(`/tasks/?projectId=${projectId}`, tasksSchema);
       },
     });
   },

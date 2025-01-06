@@ -4,21 +4,19 @@ import { useCurrentUser } from "@/modules/auth/hooks/use-current-user";
 
 type UserContextType = {
   session: Session | null;
-  refetch: () => Promise<void>;
   isAuthLoading: boolean;
 };
 
 export const UserContext = createContext<UserContextType>({
   session: null,
-  refetch: async () => {},
   isAuthLoading: false,
 });
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const { session, refetch, isAuthLoading } = useCurrentUser();
+  const { session, isAuthLoading } = useCurrentUser();
 
   return (
-    <UserContext.Provider value={{ session, refetch, isAuthLoading }}>
+    <UserContext.Provider value={{ session, isAuthLoading }}>
       {children}
     </UserContext.Provider>
   );

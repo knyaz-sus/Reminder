@@ -1,7 +1,6 @@
 import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 import { ErrorSpan } from "@/components/error-message";
 import { Input } from "@/components/input";
-import { capitalizeFirstLetter } from "@/utils/capitalize-first-letter";
 
 interface FormFieldProps<T extends FieldValues> {
   name: Path<T>;
@@ -19,7 +18,7 @@ export function FormField<T extends FieldValues>({
   return (
     <div>
       <label className="text-sm p-1" htmlFor={name}>
-        {capitalizeFirstLetter(name)}
+        {name.charAt(0).toUpperCase() + name.slice(1)}
       </label>
       <Input
         {...register(name)}
