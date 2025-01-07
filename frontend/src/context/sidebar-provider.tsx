@@ -14,8 +14,8 @@ import { cn } from "@/lib/cn";
 import {
   SIDEBAR_KEYBOARD_SHORTCUT,
   SIDEBAR_WIDTH,
-  SIDEBAR_WIDTH_ICON}
-  from "@/modules/sidebar/constants"
+  SIDEBAR_WIDTH_ICON,
+} from "@/components/sidebar/constants";
 
 interface ISidebarContext {
   state: "expanded" | "collapsed";

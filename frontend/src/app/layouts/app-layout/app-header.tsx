@@ -1,4 +1,4 @@
-import { SidebarTrigger } from "@/modules/sidebar/sidebar";
+import { SidebarTrigger } from "@/components/sidebar/sidebar";
 import { ViewOptions } from "./view-options";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { cn } from "@/lib/cn";

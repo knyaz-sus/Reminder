@@ -1,7 +1,11 @@
 import { z } from "zod";
 
 export const addProjectRequestSchema = z.object({
-  body: z.object({ name: z.string().nonempty(), userId: z.string().uuid() }),
+  body: z.object({
+    id: z.string().uuid().optional(),
+    name: z.string().nonempty(),
+    adminId: z.string().uuid(),
+  }),
 });
 
 export const getProjectsRequestSchema = z.object({

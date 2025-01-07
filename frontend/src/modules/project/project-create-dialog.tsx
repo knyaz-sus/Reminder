@@ -3,7 +3,7 @@ import { DialogFooter, DialogHeader } from "@/components/dialog";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
 import { Plus } from "lucide-react";
-// import { useCreateProject } from "./hooks/use-create-todo";
+import { useCreateProject } from "./hooks/use-create-project";
 import {
   Dialog,
   DialogContent,
@@ -13,10 +13,14 @@ import {
   DialogClose,
 } from "@/components/dialog";
 
-export function ProjectCreate() {
+export function ProjectCreateDialog() {
   const [projectName, setProjectName] = useState("");
   const [open, setOpen] = useState(false);
-  // const createProjectMutation = useCreateProject();
+  const { handleCreate } = useCreateProject();
+  const createProject = () => {
+    handleCreate(projectName);
+    setOpen(false);
+  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="[&>svg]:size-4 [&>svg]:shrink-0  hover:text-sidebar-foreground">
@@ -47,15 +51,9 @@ export function ProjectCreate() {
               Close
             </Button>
           </DialogClose>
-          <DialogTrigger asChild>
-            {/* <Button
-              onClick={() => createProjectMutation.handleCreate(projectName)}
-              size="sm"
-              disabled={projectName === ""}
-            >
-              Confirm
-            </Button> */}
-          </DialogTrigger>
+          <Button onClick={createProject} size="sm" disabled={!projectName}>
+            Confirm
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

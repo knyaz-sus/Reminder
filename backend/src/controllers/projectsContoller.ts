@@ -12,12 +12,13 @@ import {
 
 export const addProject = async (req: Request, res: Response) => {
   try {
-    const {
-      body: { name, userId },
-    } = await zParse(addProjectRequestSchema, req, res);
-    const { error } = await supabase
+    const { body } = await zParse(addProjectRequestSchema, req);
+
+    const { data, error } = await supabase
       .from("projects")
-      .insert({ name, adminId: userId });
+      .insert(body)
+      .select();
+
     if (error) {
       console.log(error.message);
       return res
@@ -25,7 +26,7 @@ export const addProject = async (req: Request, res: Response) => {
         .json({ message: "Error creating project", error: error.message });
     }
 
-    res.status(200).json({ message: "Project created successfully" });
+    res.status(200).json(data);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error", error });
@@ -36,7 +37,7 @@ export const getProjects = async (req: Request, res: Response) => {
   try {
     const {
       query: { userId },
-    } = await zParse(getProjectsRequestSchema, req, res);
+    } = await zParse(getProjectsRequestSchema, req);
     const { data: projects, error } = await supabase
       .from("projects")
       .select("*")
@@ -57,9 +58,9 @@ export const getProjects = async (req: Request, res: Response) => {
 export const deleteProject = async (req: Request, res: Response) => {
   try {
     const {
-      params: { id: projectId },
+      params: { id },
       body: { adminId },
-    } = await zParse(deleteProjectRequestSchema, req, res);
+    } = await zParse(deleteProjectRequestSchema, req);
     const token = req.header("Authorization")?.replace("Bearer ", "");
     const decodedToken = jwt.decode(token as string, {
       complete: true,
@@ -68,17 +69,14 @@ export const deleteProject = async (req: Request, res: Response) => {
     if (decodedToken?.payload.sub !== adminId) {
       return res.status(400).json({ message: "Only admin can delete project" });
     }
-    const { error } = await supabase
-      .from("projects")
-      .delete()
-      .eq("id", projectId);
+    const { error } = await supabase.from("projects").delete().eq("id", id);
     if (error) {
       console.log(error.message);
       return res
         .status(500)
         .json({ message: "Error deleting project", error: error.message });
     }
-    return res.status(200).json({ message: "Project deleted successfully" });
+    res.status(200).json({ message: "Project deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }
@@ -86,13 +84,10 @@ export const deleteProject = async (req: Request, res: Response) => {
 export const updateProject = async (req: Request, res: Response) => {
   try {
     const {
-      body: { name },
-      params: { id: projectId },
-    } = await zParse(updateProjectRequestSchema, req, res);
-    const { error } = await supabase
-      .from("projects")
-      .update({ name })
-      .eq("id", projectId);
+      body,
+      params: { id },
+    } = await zParse(updateProjectRequestSchema, req);
+    const { error } = await supabase.from("projects").update(body).eq("id", id);
     if (error) {
       console.log(error.message);
       return res
@@ -101,19 +96,19 @@ export const updateProject = async (req: Request, res: Response) => {
     }
     return res.status(200).json({ message: "Project updated successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
 export const getProject = async (req: Request, res: Response) => {
   try {
     const {
-      params: { id: projectId },
-    } = await zParse(getProjectRequestSchema, req, res);
+      params: { id },
+    } = await zParse(getProjectRequestSchema, req);
     const { data: project, error } = await supabase
       .from("projects")
       .select("*")
-      .eq("id", projectId)
+      .eq("id", id)
       .single();
     if (error) {
       console.log(error.message);

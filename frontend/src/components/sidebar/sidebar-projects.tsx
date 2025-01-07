@@ -6,25 +6,27 @@ import {
 import { ChevronDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { ProjectCreate } from "../../project/project-create";
+import { ProjectCreateDialog } from "@/modules/project/project-create-dialog";
 import { SidebarProject } from "./sidebar-project";
-import { useLocation } from "react-router-dom";
 import { projectApi } from "@/modules/project/project-api";
-import { SidebarGroup, SidebarGroupContent } from "../sidebar";
+import { SidebarGroup, SidebarGroupContent } from "./sidebar";
 
 export function SidebarProjects() {
-  const location = useLocation();
   const { session, isAuthLoading } = useAuth();
   const {
     data: projects,
     isPending,
     isError,
   } = useQuery({
-    ...projectApi.getAllProjectsQueryOptions(
-      session?.user.id,
-    ),
+    ...projectApi.getAllProjectsQueryOptions(session?.user.id),
     enabled: !!session?.user && !isAuthLoading,
   });
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    <div>Can't get projects</div>;
+  }
   return (
     <SidebarGroup>
       <SidebarGroupContent>
@@ -36,7 +38,7 @@ export function SidebarProjects() {
           hover:bg-sidebar-accent"
           >
             <div className="flex-auto">My projects</div>
-            <ProjectCreate />
+            <ProjectCreateDialog />
             <CollapsibleTrigger className="[&>svg]:size-4 [&>svg]:shrink-0 p-1">
               <ChevronDown
                 strokeWidth={3}
@@ -47,29 +49,13 @@ export function SidebarProjects() {
             </CollapsibleTrigger>
           </div>
           <CollapsibleContent className="overflow-auto">
-            {isPending && <div>Loading...</div>}
-            {isError && <div>Can't get projects</div>}
-            {!!projects &&
-              (projects.length === 0 ? (
-                <div className="text-center p-4">
-                  You don't have any projects
-                </div>
-              ) : (
-                projects.map((project) => {
-                  const { id, adminId, name } = project;
-                  return (
-                    <SidebarProject
-                      key={id}
-                      id={id}
-                      adminId={adminId}
-                      name={name}
-                      isActive={
-                        location.pathname === `/app/projects/${project.id}`
-                      }
-                    />
-                  );
-                })
-              ))}
+            {projects?.length === 0 ? (
+              <div className="text-center p-4">You don't have any projects</div>
+            ) : (
+              projects?.map((project) => (
+                <SidebarProject key={project.id} {...project} />
+              ))
+            )}
           </CollapsibleContent>
         </Collapsible>
       </SidebarGroupContent>

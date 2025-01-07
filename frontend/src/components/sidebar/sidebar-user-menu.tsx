@@ -9,7 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "../sidebar";
+} from "./sidebar";
 
 export function SidebarUserMenu() {
   const { session, isAuthLoading } = useAuth();

@@ -12,7 +12,7 @@ export const addTask = async (req: Request, res: Response) => {
   try {
     const {
       body: { title, description, projectId, date },
-    } = await zParse(addTaskRequestSchema, req, res);
+    } = await zParse(addTaskRequestSchema, req);
     const { error } = await supabase
       .from("tasks")
       .insert({ title, projectId, description, date });
@@ -35,7 +35,7 @@ export const getTasks = async (req: Request, res: Response) => {
   try {
     const {
       query: { projectId },
-    } = await zParse(getTasksRequestSchema, req, res);
+    } = await zParse(getTasksRequestSchema, req);
     const { data: tasks, error } = await supabase
       .from("tasks")
       .select("*")
@@ -56,7 +56,7 @@ export const getTasks = async (req: Request, res: Response) => {
 export const deleteTask = async (req: Request, res: Response) => {
   const {
     params: { id: taskId },
-  } = await zParse(deleteTaskRequestSchema, req, res);
+  } = await zParse(deleteTaskRequestSchema, req);
   try {
     const { error } = await supabase.from("tasks").delete().eq("id", taskId);
     if (error) {
@@ -76,7 +76,7 @@ export const updateTask = async (req: Request, res: Response) => {
     const {
       body,
       params: { id: taskId },
-    } = await zParse(updateTaskRequestHandelr, req, res);
+    } = await zParse(updateTaskRequestHandelr, req);
     const { error } = await supabase
       .from("tasks")
       .update(body)

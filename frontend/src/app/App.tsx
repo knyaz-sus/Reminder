@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/home-page";
-import { AuthLayout } from "./layouts/auth-layout/auth-layout";
+import { AuthLayout } from "./layouts/auth-layout";
 import { TodayPage } from "./pages/today-page";
 import { AppLayout } from "./layouts/app-layout/app-layout";
 import ProtectedRoute from "@/modules/auth/components/protected-route";

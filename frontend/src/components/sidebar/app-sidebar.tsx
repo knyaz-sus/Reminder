@@ -1,8 +1,4 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-} from "@/modules/sidebar/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter } from "./sidebar";
 import { SidebarRoutes } from "./sidebar-routes";
 import { SidebarProjects } from "./sidebar-projects";
 import { SidebarUserMenu } from "./sidebar-user-menu";

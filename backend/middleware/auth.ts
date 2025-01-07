@@ -3,7 +3,6 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log(req.headers);
     const token = req.header("Authorization")?.split(" ")[1];
     if (token) {
       jwt.verify(token, process.env.SUPABASE_JWT_SECRET) as JwtPayload;

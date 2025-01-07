@@ -6,8 +6,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "../sidebar";
-import { sidebarMenuRoutes } from "../constants";
+} from "./sidebar";
+import { sidebarMenuRoutes } from "./constants";
 
 export function SidebarRoutes() {
   const location = useLocation();

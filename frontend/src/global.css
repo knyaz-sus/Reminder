@@ -106,6 +106,16 @@
   }
 }
 
+.hover-child {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hover-parent:hover .hover-child {
+  opacity: 1;
+  visibility: visible;
+}
+
 @font-face {
   font-family: "Inter";
   src: url("/src/assets/fonts/inter/regular.woff2") format("woff2"),

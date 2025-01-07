@@ -7,7 +7,7 @@ export const getUser = async (req: Request, res: Response) => {
   try {
     const {
       params: { id: userId },
-    } = await zParse(getUserRequestSchema, req, res);
+    } = await zParse(getUserRequestSchema, req);
     const { data: user, error } = await supabase
       .from("users")
       .select("*")
