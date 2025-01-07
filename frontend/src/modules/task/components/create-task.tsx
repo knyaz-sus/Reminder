@@ -1,35 +1,33 @@
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { Button } from "@/components/button";
 import { DatePicker } from "@/components/date-picker";
 import { Separator } from "@/components/separator";
 import { RichEditor } from "@/components/editor/rich-editor";
-import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { useAddOptimistic } from "@/hooks/useAddOptimistic";
-import { Task } from "@/types/schemas";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
 import { PrioritySelect } from "./priority-select";
-import { priorities } from "@/constants/ui";
-import { taskApi } from "../task-api";
+import { Priorities } from "@/constants/ui";
+import { useCreateTask } from "../hooks/use-create-task";
 
 export function CreateTask({ toggleCreating }: { toggleCreating: () => void }) {
   const { id } = useParams();
   const [title, setTitle] = useState("<p></p>");
   const [description, setDescription] = useState("<p></p>");
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [priority, setPriority] = useState<(typeof priorities)[number]>("4");
-  const { session } = useAuth();
-  const createTaskMutation = useAddOptimistic<Task>({
-    mutationFn: () =>
-      taskApi.addTask(session?.access_token, {
-        id,
-        title,
-        description,
-        date: date?.toISOString(),
-      }),
-    queryKey: ["user-tasks", id, session?.access_token],
-    newEntity: { title, description, date: null },
-  });
-
+  const [priority, setPriority] = useState<Priorities>("4");
+  const { handleCreate } = useCreateTask(id);
+  if (!id) {
+    throw new Error("Can't use CreateTask component outside of project page");
+  }
+  const addTask = () => {
+    handleCreate({
+      title,
+      projectId: id,
+      description,
+      date: date?.toISOString(),
+      priority,
+    });
+    toggleCreating();
+  };
   return (
     <div
       className="flex flex-col justify-center px-3 pt-3
@@ -65,13 +63,10 @@ export function CreateTask({ toggleCreating }: { toggleCreating: () => void }) {
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              createTaskMutation.mutate(session?.user.id);
-              toggleCreating();
-            }}
+            onClick={addTask}
+            disabled={title === "<p></p>"}
             className="text-xs"
             size="sm"
-            disabled={title === "<p></p>"}
           >
             Add task
           </Button>

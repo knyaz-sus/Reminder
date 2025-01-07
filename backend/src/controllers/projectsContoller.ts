@@ -17,7 +17,7 @@ export const addProject = async (req: Request, res: Response) => {
     const { data, error } = await supabase
       .from("projects")
       .insert(body)
-      .select();
+      .select("*");
 
     if (error) {
       console.log(error.message);
@@ -26,7 +26,7 @@ export const addProject = async (req: Request, res: Response) => {
         .json({ message: "Error creating project", error: error.message });
     }
 
-    res.status(200).json(data);
+    res.status(200).json(data[0]);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error", error });
@@ -42,7 +42,7 @@ export const getProjects = async (req: Request, res: Response) => {
       .from("projects")
       .select("*")
       .eq("adminId", userId)
-      .order("createdAt", { ascending: true });
+      .order("createdAt", { ascending: false });
     if (error) {
       console.log(error.message);
       return res
@@ -87,14 +87,18 @@ export const updateProject = async (req: Request, res: Response) => {
       body,
       params: { id },
     } = await zParse(updateProjectRequestSchema, req);
-    const { error } = await supabase.from("projects").update(body).eq("id", id);
+    const { data, error } = await supabase
+      .from("projects")
+      .update(body)
+      .eq("id", id)
+      .select("*");
     if (error) {
       console.log(error.message);
       return res
         .status(500)
         .json({ message: "Error updating project", error: error.message });
     }
-    return res.status(200).json({ message: "Project updated successfully" });
+    return res.status(200).json(data[0]);
   } catch (error) {
     return res.status(500).json({ message: "Internal server error", error });
   }

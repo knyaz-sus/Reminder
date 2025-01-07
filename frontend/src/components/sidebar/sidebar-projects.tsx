@@ -4,7 +4,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/collapsible";
 import { ChevronDown } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { ProjectCreateDialog } from "@/modules/project/project-create-dialog";
 import { SidebarProject } from "./sidebar-project";
@@ -12,13 +12,14 @@ import { projectApi } from "@/modules/project/project-api";
 import { SidebarGroup, SidebarGroupContent } from "./sidebar";
 
 export function SidebarProjects() {
+  const queryClient = useQueryClient();
   const { session, isAuthLoading } = useAuth();
   const {
     data: projects,
     isPending,
     isError,
   } = useQuery({
-    ...projectApi.getAllProjectsQueryOptions(session?.user.id),
+    ...projectApi.getAllProjectsQueryOptions(session?.user.id, queryClient),
     enabled: !!session?.user && !isAuthLoading,
   });
   if (isPending) {

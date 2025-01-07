@@ -1,27 +1,25 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { projectApi } from "../project-api";
+import { taskApi } from "../task-api";
 import {
-  updateProjectRequestSchema,
-  UpdateProjectRequestSchema,
+  UpdateTaskRequestSchema,
+  updateTaskRequestSchema,
 } from "@/types/schemas";
-import { useAuth } from "@/modules/auth/hooks/use-auth";
 
-export const useUpdateProject = () => {
+export const useUpdateTask = (projectId: string) => {
   const queryClient = useQueryClient();
-  const { session } = useAuth();
 
   const { mutate, error } = useMutation({
-    mutationFn: projectApi.updateProject,
+    mutationFn: taskApi.updateTask,
 
     async onMutate(updatedProperties) {
-      await queryClient.cancelQueries({ queryKey: projectApi.baseKey });
+      await queryClient.cancelQueries({ queryKey: taskApi.baseKey });
 
       const previousData = queryClient.getQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey
+        taskApi.getProjectTasksQueryOptions(projectId).queryKey
       );
 
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        taskApi.getProjectTasksQueryOptions(projectId).queryKey,
         (old = []) =>
           old.map((el) => {
             if (el.id === updatedProperties.id) {
@@ -36,19 +34,19 @@ export const useUpdateProject = () => {
 
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        taskApi.getProjectTasksQueryOptions(projectId).queryKey,
         previousData
       );
     },
 
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: projectApi.baseKey });
+      queryClient.invalidateQueries({ queryKey: taskApi.baseKey });
     },
   });
 
-  const handleUpdate = (updateProperties: UpdateProjectRequestSchema) => {
+  const handleUpdate = (updateProperties: UpdateTaskRequestSchema) => {
     const { data, success } =
-      updateProjectRequestSchema.safeParse(updateProperties);
+      updateTaskRequestSchema.safeParse(updateProperties);
     if (success) mutate(data);
   };
 

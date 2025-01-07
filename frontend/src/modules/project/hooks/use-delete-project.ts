@@ -5,12 +5,10 @@ import {
   DeleteProjectRequestSchema,
   deleteProjectRequestSchema,
 } from "@/types/schemas";
-import { useNavigate } from "react-router-dom";
 
 export const useDeleteProject = () => {
   const queryClient = useQueryClient();
   const { session } = useAuth();
-  const navigate = useNavigate();
 
   const { mutate, error } = useMutation({
     mutationFn: projectApi.deleteProject,
@@ -24,16 +22,16 @@ export const useDeleteProject = () => {
 
       queryClient.setQueryData(
         projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
-        (old = []) => {
-          navigate("/app/today");
-          return old.filter((el) => el.id !== vars.id);
-        }
+        (old = []) => old.filter((el) => el.id !== vars.id)
       );
 
-      return { previousData };
+      return previousData;
     },
     onError(_, __, previousData) {
-      queryClient.setQueryData(projectApi.baseKey, previousData);
+      queryClient.setQueryData(
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        previousData
+      );
     },
     onSettled() {
       queryClient.invalidateQueries({ queryKey: projectApi.baseKey });

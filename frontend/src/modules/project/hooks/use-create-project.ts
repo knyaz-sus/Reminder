@@ -25,21 +25,24 @@ export const useCreateProject = () => {
         projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
         (old = []) => {
           return [
-            ...old,
             {
               ...newProject,
               id: newProjectId,
               updatedAt: new Date().toISOString(),
               createdAt: new Date().toISOString(),
             },
+            ...old,
           ];
         }
       );
 
-      return { previousData };
+      return previousData;
     },
     onError(_, __, previousData) {
-      queryClient.setQueryData(projectApi.baseKey, previousData);
+      queryClient.setQueryData(
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        previousData
+      );
     },
     onSettled() {
       queryClient.invalidateQueries({ queryKey: projectApi.baseKey });

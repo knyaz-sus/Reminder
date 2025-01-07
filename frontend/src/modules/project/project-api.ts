@@ -9,11 +9,12 @@ import {
   UpdateProjectRequestSchema,
 } from "@/types/schemas";
 import { getWithValidation } from "@/api/get-with-validation";
-import { queryOptions } from "@tanstack/react-query";
+import { QueryClient, queryOptions } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios";
 
 export const projectApi = {
   baseKey: ["projects"],
+
   getProjectQueryOptions(projectId: string | undefined) {
     return queryOptions({
       queryFn: () => {
@@ -24,11 +25,21 @@ export const projectApi = {
     });
   },
 
-  getAllProjectsQueryOptions(userId: string | undefined) {
+  getAllProjectsQueryOptions(
+    userId: string | undefined,
+    queryClient?: QueryClient
+  ) {
     return queryOptions({
-      queryFn: () => {
+      queryFn: async () => {
         z.string().uuid().parse(userId);
-        return getWithValidation(`/projects/?userId=${userId}`, projectsSchema);
+        const projects = await getWithValidation(
+          `/projects/?userId=${userId}`,
+          projectsSchema
+        );
+        projects?.forEach((project) =>
+          queryClient?.setQueryData<Project>(["projects", project.id], project)
+        );
+        return projects;
       },
       queryKey: ["projects", userId],
     });

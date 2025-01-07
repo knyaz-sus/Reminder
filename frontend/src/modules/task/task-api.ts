@@ -1,70 +1,59 @@
-import { Task, tasksSchema } from "@/types/schemas";
+import {
+  CreateTaskRequestSchema,
+  Task,
+  taskSchema,
+  tasksSchema,
+  UpdateTaskRequestSchema,
+} from "@/types/schemas";
 import { getWithValidation } from "@/api/get-with-validation";
 import { queryOptions } from "@tanstack/react-query";
+import { z } from "zod";
+import { axiosInstance } from "@/lib/axios";
+import { AxiosResponse } from "axios";
 
 export const taskApi = {
+  baseKey: ["tasks"],
+
   getProjectTasksQueryOptions(projectId: string | undefined) {
     return queryOptions({
-      queryKey: ["user-tasks", projectId],
+      queryKey: ["tasks", projectId],
       queryFn: () => {
-        if (!projectId) return;
+        z.string().uuid().parse(projectId);
         return getWithValidation(`/tasks/?projectId=${projectId}`, tasksSchema);
       },
     });
   },
 
-  async addTask(accToken: string | undefined, newTask?: Partial<Task>) {
-    try {
-      if (!newTask) return;
-      const { title, projectId, description, date } = newTask;
-      if (!title || !accToken || !projectId) return;
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/tasks`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title, projectId, description, date }),
-      });
-      console.log(await res.json());
-    } catch (e) {
-      console.log(e);
-    }
+  async addTask(newTask: CreateTaskRequestSchema) {
+    const url = `${import.meta.env.VITE_API_URL}/tasks`;
+    const { data } = await axiosInstance.post<
+      CreateTaskRequestSchema,
+      AxiosResponse<Task>
+    >(url, newTask);
+    console.log("new task", newTask);
+    console.log("data", data);
+
+    const validatedData = taskSchema.parse(data);
+    return validatedData;
   },
 
-  async deleteTask(id: string, accToken: string | undefined) {
-    if (!accToken || !id) return;
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/tasks/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${accToken}`,
-        "Content-Type": "application/json",
-      },
-    });
-    return await res.json();
+  async deleteTask(id: string) {
+    const url = `${import.meta.env.VITE_API_URL}/tasks/${id}`;
+    const { data } = await axiosInstance.delete<
+      string,
+      AxiosResponse<{ message: string }>
+    >(url);
+    return data;
   },
 
-  async updateTask({
-    id,
-    updatedProperties,
-    accToken,
-  }: {
-    id: string;
-    updatedProperties: Partial<Task>;
-    accToken: string | undefined;
-  }) {
-    if (!accToken || !updatedProperties || !accToken) return;
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/tasks/${id}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${accToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedProperties),
-    });
-    const data = await res.json();
-    if (!res.ok) return;
+  async updateTask(updatedProperties: UpdateTaskRequestSchema) {
+    const url = `${import.meta.env.VITE_API_URL}/tasks/${updatedProperties.id}`;
+    const { data } = await axiosInstance.put<
+      UpdateTaskRequestSchema,
+      AxiosResponse<Task>
+    >(url, updatedProperties);
     console.log(data);
+    taskSchema.parse(data);
     return data;
   },
 };

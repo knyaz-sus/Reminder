@@ -43,9 +43,10 @@ export const addTaskRequestSchema = z.object({
   body: z.object({
     title: z.string().nonempty(),
     projectId: z.string().uuid(),
-    description: z.string().optional().nullable(),
+    description: z.string().nullable().optional(),
     date: z.string().optional(),
     priority: z.enum(["1", "2", "3", "4"]).optional(),
+    updatedAt: z.string().optional(),
   }),
 });
 
@@ -61,8 +62,9 @@ export const deleteTaskRequestSchema = z.object({
   }),
 });
 
-export const updateTaskRequestHandelr = z.object({
+export const updateTaskRequestSchema = z.object({
   body: z.object({
+    id: z.string().uuid().optional(),
     title: z.string().optional(),
     description: z.string().optional().nullable(),
     date: z.string().nullable().optional(),

@@ -58,6 +58,30 @@ export const updateProjectRequestSchema = z.object({
   createdAt: z.string().optional(),
 });
 
+export const createTaskRequestSchema = z.object({
+  title: z.string(),
+  projectId: z.string().uuid(),
+  description: z.string().optional().nullable().optional(),
+  date: z.string().nullable().optional(),
+  updatedAt: z.string().optional(),
+  priority: z.enum(["1", "2", "3", "4"]).optional(),
+});
+
+export const updateTaskRequestSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string().optional(),
+  description: z.string().optional().nullable().optional(),
+  date: z.string().nullable().optional(),
+  isDone: z.boolean().optional(),
+  projectId: z.string().uuid().optional(),
+  updatedAt: z.string().optional(),
+  priority: z.enum(["1", "2", "3", "4"]).optional(),
+});
+
+export type CreateTaskRequestSchema = z.infer<typeof createTaskRequestSchema>;
+
+export type UpdateTaskRequestSchema = z.infer<typeof updateTaskRequestSchema>;
+
 export type UpdateProjectRequestSchema = z.infer<
   typeof updateProjectRequestSchema
 >;

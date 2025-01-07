@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogClose,
@@ -25,10 +26,12 @@ import { Project } from "@/types/schemas";
 import { useUpdateProject } from "./hooks/use-update-project";
 
 export function ProjectUpdateDialog(project: Project) {
+  const navigate = useNavigate();
   const [updateName, setUpdateName] = useState(project.name);
   const { handleDelete } = useDeleteProject();
   const { handleUpdate } = useUpdateProject();
   const deleteProject = () => {
+    navigate("/app/today");
     handleDelete({ id: project.id, adminId: project.adminId });
   };
   const updateProject = () => {

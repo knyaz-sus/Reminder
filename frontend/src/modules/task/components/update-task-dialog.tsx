@@ -2,16 +2,10 @@ import { Button } from "@/components/button";
 import { DatePicker } from "@/components/date-picker";
 import { RichEditor } from "@/components/editor/rich-editor";
 import { Separator } from "@/components/separator";
-import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { useTaskState } from "@/hooks/use-task-state";
-import { Task } from "@/types/schemas";
-import { UseMutateFunction } from "@tanstack/react-query";
 import { Hash, Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { PrioritySelect } from "./priority-select";
-import { useUpdateOptimistic } from "@/hooks/useUpdateOptimistic";
-import { taskApi } from "../task-api";
 import {
   Dialog,
   DialogClose,
@@ -20,42 +14,46 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/dialog";
+import { TaskProps } from "./project-tasks";
+import { useDeleteTask } from "../hooks/use-delete-task";
+import { useUpdateTask } from "../hooks/use-update-task";
 
 type UpdateTaskModalProps = {
   open: boolean;
   onOpenChange: (arg: boolean) => void;
-  deleteHandler: UseMutateFunction<Task, Error, unknown, { previous: Task[] }>;
-};
+} & TaskProps;
 
 export function UpdateTaskModal({
   open,
   onOpenChange,
-  deleteHandler,
+  id,
+  title,
+  description,
+  date,
+  priority,
+  projectId,
+  projectName,
 }: UpdateTaskModalProps) {
-  const { session } = useAuth();
-  const taskState = useTaskState();
-  const { title, description, projectName, date, id, projectId, priority } =
-    taskState;
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDescription, setUpdatedDescription] = useState(description);
   const [controlledDate, setControlledDate] = useState<Date | undefined>(date);
   const [updatedPriority, setUpdatedPriority] = useState(priority);
-  const updateTaskMutation = useUpdateOptimistic({
-    mutationFn: () =>
-      taskApi.updateTask({
-        id,
-        updatedProperties: {
-          title: updatedTitle,
-          description: updatedDescription,
-          date: controlledDate?.toISOString(),
-          priority: updatedPriority,
-        },
-        accToken: session?.access_token,
-      }),
-    queryKey: ["user-tasks", projectId, session?.access_token],
-    id,
-    updateList: { title: updatedTitle, description: updatedDescription },
-  });
+  const { mutate } = useDeleteTask(projectId);
+  const { handleUpdate } = useUpdateTask(projectId);
+  const deleteTask = () => {
+    onOpenChange(false);
+    mutate(id);
+  };
+  const updateTask = () => {
+    onOpenChange(false);
+    handleUpdate({
+      id,
+      title: updatedTitle,
+      description: updatedDescription,
+      date: controlledDate?.toISOString(),
+      priority: updatedPriority,
+    });
+  };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -82,7 +80,7 @@ export function UpdateTaskModal({
             </Link>
           </Button>
           <div className="flex w-full justify-end gap-2">
-            <Button variant="ghost" size="xs" onClick={deleteHandler}>
+            <Button variant="ghost" size="xs" onClick={deleteTask}>
               <Trash2 />
             </Button>
             <DialogClose asChild>
@@ -99,7 +97,7 @@ export function UpdateTaskModal({
               <RichEditor
                 content={title}
                 handleSave={setUpdatedTitle}
-                autofocus
+                autofocus="end"
                 placeholder="Provide title..."
               />
               <RichEditor
@@ -137,7 +135,7 @@ export function UpdateTaskModal({
             <Button
               size="sm"
               onClick={() => {
-                updateTaskMutation.mutate({});
+                updateTask();
                 onOpenChange(false);
               }}
             >

@@ -5,17 +5,17 @@ import {
   addTaskRequestSchema,
   deleteTaskRequestSchema,
   getTasksRequestSchema,
-  updateTaskRequestHandelr,
+  updateTaskRequestSchema,
 } from "../types/schemas";
 
 export const addTask = async (req: Request, res: Response) => {
   try {
-    const {
-      body: { title, description, projectId, date },
-    } = await zParse(addTaskRequestSchema, req);
-    const { error } = await supabase
+    const { body } = await zParse(addTaskRequestSchema, req);
+
+    const { data, error } = await supabase
       .from("tasks")
-      .insert({ title, projectId, description, date });
+      .insert(body)
+      .select("*");
 
     if (error) {
       console.log(error.message);
@@ -23,8 +23,7 @@ export const addTask = async (req: Request, res: Response) => {
         .status(500)
         .json({ message: "Error creating task", error: error.message });
     }
-
-    res.status(200).json({ message: "Task created successfully" });
+    res.status(200).json(data[0]);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error", error });
@@ -76,18 +75,20 @@ export const updateTask = async (req: Request, res: Response) => {
     const {
       body,
       params: { id: taskId },
-    } = await zParse(updateTaskRequestHandelr, req);
-    const { error } = await supabase
+    } = await zParse(updateTaskRequestSchema, req);
+    const { data, error } = await supabase
       .from("tasks")
       .update(body)
-      .eq("id", taskId);
+      .eq("id", taskId)
+      .select("*");
+
     if (error) {
-      console.log(error.message);
-      return res
-        .status(500)
-        .json({ message: "Error updating project", error: error.message });
+      console.log(error);
+      return res.status(500).json({ message: "Error updating project", error });
     }
-    return res.status(200).json({ message: "Task updated successfully" });
+    console.log(data, body);
+    const updatedTask = data.find((el) => el.id === taskId);
+    return res.status(200).json(updatedTask);
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }

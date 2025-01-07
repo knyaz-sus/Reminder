@@ -25,13 +25,8 @@ export function ProjectPage() {
     enabled: !!session && !isAuthLoading,
   });
 
-  const {
-    data: project,
-    isPending: isProjectPending,
-    isError: isProjectError,
-  } = useQuery({
+  const { data: project, isError: isProjectError } = useQuery({
     ...projectApi.getProjectQueryOptions(id),
-    enabled: !!session && !isAuthLoading,
   });
 
   const toggleCreating = () => setIsCreating((prev) => !prev);
@@ -46,27 +41,31 @@ export function ProjectPage() {
       </div>
     );
   }
-  if (isTasksPending || isProjectPending) {
-    return <h1 className="flex items-center justify-center">Loading...</h1>;
-  }
+
   return (
     <>
       <h1 className="mb-4">{project?.name}</h1>
-      <ProjectTasks tasks={tasks} projectName={project?.name} />
-      {isCreating ? (
-        <CreateTask toggleCreating={toggleCreating} />
+      {isTasksPending ? (
+        <div>Loading...</div>
       ) : (
         <>
-          {tasks?.length === 0 && <Separator />}
-          <Button
-            onClick={toggleCreating}
-            className="justify-start pl-0 text-foreground/60 hover:bg-inherit hover:text-foreground"
-            size="sm"
-            variant="ghost"
-          >
-            <Plus />
-            <span>Add task</span>
-          </Button>
+          <ProjectTasks tasks={tasks} projectName={project?.name} />
+          {isCreating ? (
+            <CreateTask toggleCreating={toggleCreating} />
+          ) : (
+            <>
+              {tasks?.length === 0 && <Separator />}
+              <Button
+                onClick={toggleCreating}
+                className="justify-start pl-0 text-foreground/60 hover:bg-inherit hover:text-foreground"
+                size="sm"
+                variant="ghost"
+              >
+                <Plus />
+                <span>Add task</span>
+              </Button>
+            </>
+          )}
         </>
       )}
     </>
