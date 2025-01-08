@@ -1,11 +1,19 @@
 import { priorities } from "@/constants/ui";
-import { Circle } from "lucide-react";
+import { CircleCheck, Circle } from "lucide-react";
+
+interface TaskCheckProps {
+  className?: string;
+  onClick?: () => void;
+  priority: (typeof priorities)[number];
+  isDone: boolean;
+}
 
 export function TaskCheck({
   priority,
-}: {
-  priority: (typeof priorities)[number];
-}) {
+  className,
+  onClick,
+  isDone,
+}: TaskCheckProps) {
   const getCheckColor = () => {
     switch (priority) {
       case "1":
@@ -18,10 +26,13 @@ export function TaskCheck({
         return "#ffff";
     }
   };
-
   return (
-    <button>
-      <Circle size={18} color={getCheckColor()} />
+    <button className={className} onClick={onClick}>
+      {isDone ? (
+        <CircleCheck size={18} color="gray" />
+      ) : (
+        <Circle size={18} color={getCheckColor()} />
+      )}
     </button>
   );
 }

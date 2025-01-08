@@ -50,5 +50,7 @@ export const useUpdateTask = (projectId: string) => {
     if (success) mutate(data);
   };
 
-  return { handleUpdate, error };
+  const handleDone = (id: string, isDone: boolean) => mutate({ id, isDone });
+
+  return { handleUpdate, handleDone, error };
 };

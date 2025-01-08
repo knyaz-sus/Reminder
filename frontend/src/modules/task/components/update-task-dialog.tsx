@@ -17,6 +17,7 @@ import {
 import { TaskProps } from "./project-tasks";
 import { useDeleteTask } from "../hooks/use-delete-task";
 import { useUpdateTask } from "../hooks/use-update-task";
+import { TaskCheck } from "./task-check";
 
 type UpdateTaskModalProps = {
   open: boolean;
@@ -33,6 +34,7 @@ export function UpdateTaskModal({
   priority,
   projectId,
   projectName,
+  isDone,
 }: UpdateTaskModalProps) {
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDescription, setUpdatedDescription] = useState(description);
@@ -93,19 +95,26 @@ export function UpdateTaskModal({
         <Separator />
         <div className="flex flex-auto overflow-hidden">
           <div className="flex flex-col gap-2 p-4 w-2/3">
-            <div className="flex flex-col gap-1 mb-2">
-              <RichEditor
-                content={title}
-                handleSave={setUpdatedTitle}
-                autofocus="end"
-                placeholder="Provide title..."
+            <div className="flex gap-2 items-start">
+              <TaskCheck
+                priority={priority}
+                onClick={deleteTask}
+                isDone={isDone}
               />
-              <RichEditor
-                content={description ? description : undefined}
-                handleSave={setUpdatedDescription}
-                autofocus={false}
-                placeholder="Provide description..."
-              />
+              <div className="flex flex-col gap-1 mb-2">
+                <RichEditor
+                  content={title}
+                  handleSave={setUpdatedTitle}
+                  autofocus="end"
+                  placeholder="Provide title..."
+                />
+                <RichEditor
+                  content={description ? description : undefined}
+                  handleSave={setUpdatedDescription}
+                  autofocus={false}
+                  placeholder="Provide description..."
+                />
+              </div>
             </div>
             <Button
               className="self-start text-xs text-foreground/80"
@@ -132,13 +141,7 @@ export function UpdateTaskModal({
                 onSelectChange={setUpdatedPriority}
               />
             </div>
-            <Button
-              size="sm"
-              onClick={() => {
-                updateTask();
-                onOpenChange(false);
-              }}
-            >
+            <Button size="sm" onClick={updateTask}>
               Save changes
             </Button>
           </div>

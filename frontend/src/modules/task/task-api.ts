@@ -14,12 +14,12 @@ import { AxiosResponse } from "axios";
 export const taskApi = {
   baseKey: ["tasks"],
 
-  getProjectTasksQueryOptions(projectId: string | undefined) {
+  getProjectTasksQueryOptions(queryKey: string | undefined) {
     return queryOptions({
-      queryKey: ["tasks", projectId],
+      queryKey: ["tasks", queryKey],
       queryFn: () => {
-        z.string().uuid().parse(projectId);
-        return getWithValidation(`/tasks/?projectId=${projectId}`, tasksSchema);
+        z.string().uuid().parse(queryKey);
+        return getWithValidation(`/tasks/?projectId=${queryKey}`, tasksSchema);
       },
     });
   },

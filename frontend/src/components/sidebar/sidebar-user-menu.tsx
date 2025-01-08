@@ -21,7 +21,7 @@ export function SidebarUserMenu() {
     <SidebarHeader>
       <SidebarMenu className="flex-row justify-between items-center">
         <SidebarMenuItem className="flex gap-2 items-center text-sm">
-          <Avatar>
+          <Avatar className="h-7 w-7">
             <AvatarImage />
             <AvatarFallback className="bg-secondary text-secondary-foreground p-1 rounded-full">
               {user?.name?.substring(0, 2).toUpperCase()}

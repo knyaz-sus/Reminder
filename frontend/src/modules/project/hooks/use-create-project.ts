@@ -11,7 +11,7 @@ export const useCreateProject = () => {
   const navigate = useNavigate();
   const newProjectId = uuid();
 
-  const { mutate, error } = useMutation({
+  const { mutateAsync, error } = useMutation({
     mutationFn: projectApi.addProject,
 
     async onMutate(newProject) {
@@ -49,7 +49,7 @@ export const useCreateProject = () => {
     },
   });
 
-  const handleCreate = (name: string) => {
+  const handleCreate = async (name: string) => {
     const newProject = {
       id: newProjectId,
       name,
@@ -58,7 +58,7 @@ export const useCreateProject = () => {
 
     const { success, data } = createProjectRequestSchema.safeParse(newProject);
 
-    if (success) mutate(data);
+    if (success) await mutateAsync(data);
     if (newProjectId) navigate(`/app/projects/${newProjectId}`);
   };
 

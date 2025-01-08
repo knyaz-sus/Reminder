@@ -2,19 +2,22 @@ import { Button } from "@/components/button";
 import { CreateTask } from "@/modules/task/components/create-task";
 import { Separator } from "@/components/separator";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { ProjectTasks } from "@/modules/task/components/project-tasks";
 import { taskApi } from "@/modules/task/task-api";
 import { projectApi } from "@/modules/project/project-api";
 
 export function ProjectPage() {
-  const [isCreating, setIsCreating] = useState(false);
   const { id } = useParams();
   const { session, isAuthLoading } = useAuth();
 
+  const [isCreating, setIsCreating] = useState(false);
+  const location = useLocation();
+  useEffect(() => setIsCreating(false), [location]);
+  
   const {
     data: tasks,
     isPending: isTasksPending,
@@ -24,7 +27,6 @@ export function ProjectPage() {
     ...taskApi.getProjectTasksQueryOptions(id),
     enabled: !!session && !isAuthLoading,
   });
-
   const { data: project, isError: isProjectError } = useQuery({
     ...projectApi.getProjectQueryOptions(id),
   });
