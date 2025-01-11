@@ -8,7 +8,12 @@ import { PrioritySelect } from "./priority-select";
 import { Priorities } from "@/constants/ui";
 import { useCreateTask } from "../hooks/use-create-task";
 
-export function CreateTask({ toggleCreating }: { toggleCreating: () => void }) {
+interface CreateTaskProps {
+  toggleCreating: () => void;
+  order: number;
+}
+
+export function CreateTask({ toggleCreating, order }: CreateTaskProps) {
   const { id } = useParams();
   const [title, setTitle] = useState("<p></p>");
   const [description, setDescription] = useState("<p></p>");
@@ -25,6 +30,7 @@ export function CreateTask({ toggleCreating }: { toggleCreating: () => void }) {
       description,
       date: date?.toISOString(),
       priority,
+      order,
     });
     toggleCreating();
   };

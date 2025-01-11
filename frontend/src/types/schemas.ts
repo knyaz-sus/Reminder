@@ -28,6 +28,7 @@ export const taskSchema = z.object({
   updatedAt: z.string(),
   priority: z.enum(["1", "2", "3", "4"]),
   createdAt: z.string(),
+  order: z.number().int(),
 });
 export const tasksSchema = z.array(taskSchema);
 
@@ -65,6 +66,7 @@ export const createTaskRequestSchema = z.object({
   date: z.string().nullable().optional(),
   updatedAt: z.string().optional(),
   priority: z.enum(["1", "2", "3", "4"]).optional(),
+  order: z.number().int(),
 });
 
 export const updateTaskRequestSchema = z.object({

@@ -1,6 +1,7 @@
 import {
   CreateTaskRequestSchema,
   Task,
+  Tasks,
   taskSchema,
   tasksSchema,
   UpdateTaskRequestSchema,
@@ -52,8 +53,17 @@ export const taskApi = {
       UpdateTaskRequestSchema,
       AxiosResponse<Task>
     >(url, updatedProperties);
-    console.log(data);
     taskSchema.parse(data);
+    return data;
+  },
+
+  async updateOrder(updatedTasks: Tasks) {
+    const url = `${import.meta.env.VITE_API_URL}/tasks/update-order`;
+    const { data } = await axiosInstance.post<Tasks, AxiosResponse<Tasks>>(
+      url,
+      updatedTasks
+    );
+    tasksSchema.parse(data);
     return data;
   },
 };

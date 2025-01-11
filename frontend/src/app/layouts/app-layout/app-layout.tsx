@@ -9,9 +9,7 @@ export function AppLayout() {
       <AppSidebar />
       <AppHeader />
       <main className="flex justify-center pb-6 pt-16 flex-auto ">
-        <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">
-          <Outlet />
-        </div>
+        <Outlet />
       </main>
     </SidebarProvider>
   );

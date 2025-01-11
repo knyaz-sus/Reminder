@@ -5,6 +5,7 @@ import {
   addTaskRequestSchema,
   deleteTaskRequestSchema,
   getTasksRequestSchema,
+  updateOrderRequestSchema,
   updateTaskRequestSchema,
 } from "../types/schemas";
 
@@ -38,8 +39,7 @@ export const getTasks = async (req: Request, res: Response) => {
     const { data: tasks, error } = await supabase
       .from("tasks")
       .select("*")
-      .eq("projectId", projectId)
-      .order("createdAt", { ascending: true });
+      .eq("projectId", projectId);
     if (error) {
       console.log(error.message);
       return res.status(500).json({
@@ -90,6 +90,29 @@ export const updateTask = async (req: Request, res: Response) => {
     const updatedTask = data.find((el) => el.id === taskId);
     return res.status(200).json(updatedTask);
   } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const updateOrder = async (req: Request, res: Response) => {
+  try {
+    const { body } = await zParse(updateOrderRequestSchema, req);
+
+    const { data, error } = await supabase
+      .from("tasks")
+      .upsert(body, { onConflict: "id" })
+      .select();
+
+    if (error) {
+      console.log(error.message);
+      return res.status(500).json({
+        message: "Error updating order of tasks",
+        error: error.message,
+      });
+    }
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Internal server error", error });
   }
 };

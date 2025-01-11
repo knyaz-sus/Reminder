@@ -39,6 +39,21 @@ export const updateProjectRequestSchema = z.object({
 });
 /////////////////////////////////////////////////////////////////////
 
+export const taskSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  description: z.string().optional().nullable(),
+  date: z.string().nullable(),
+  isDone: z.boolean(),
+  projectId: z.string().uuid(),
+  updatedAt: z.string(),
+  priority: z.enum(["1", "2", "3", "4"]),
+  createdAt: z.string(),
+  order: z.number().int(),
+});
+
+export const updateOrderRequestSchema = z.object({ body: z.array(taskSchema) });
+
 export const addTaskRequestSchema = z.object({
   body: z.object({
     title: z.string().nonempty(),
@@ -47,6 +62,7 @@ export const addTaskRequestSchema = z.object({
     date: z.string().optional(),
     priority: z.enum(["1", "2", "3", "4"]).optional(),
     updatedAt: z.string().optional(),
+    order: z.number().int(),
   }),
 });
 
