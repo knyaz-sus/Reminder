@@ -36,14 +36,15 @@ export const getTasks = async (req: Request, res: Response) => {
     const {
       query: { projectId },
     } = await zParse(getTasksRequestSchema, req);
-    const { data: tasks, error } = await supabase
-      .from("tasks")
-      .select("*")
-      .eq("projectId", projectId);
+
+    const { data: tasks, error } =
+      projectId === null
+        ? await supabase.from("tasks").select("*").is("projectId", projectId)
+        : await supabase.from("tasks").select("*").eq("projectId", projectId);
     if (error) {
       console.log(error.message);
       return res.status(500).json({
-        message: "Error fetching tasks by projectId",
+        message: "Error fetching tasks",
       });
     }
     res.status(200).json(tasks);

@@ -17,7 +17,12 @@ export const useUpdateTaskOrder = (queryKey: string) => {
 
       queryClient.setQueryData(
         taskApi.getProjectTasksQueryOptions(queryKey).queryKey,
-        () => tasks.sort((a, b) => a.order - b.order)
+        () =>
+          tasks.sort((a, b) => {
+            const aOrder = a.order as number;
+            const bOrder = b.order as number;
+            return aOrder - bOrder;
+          })
       );
 
       return previousData;

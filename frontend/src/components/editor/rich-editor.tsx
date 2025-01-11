@@ -3,6 +3,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { BubbleMenuEditor } from "./bubble-menu-editor";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { Underline } from "@tiptap/extension-underline";
+import { useEffect } from "react";
 
 interface RichEditorProps {
   content?: string;
@@ -25,6 +26,13 @@ export function RichEditor({
     },
     autofocus,
   });
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content || "");
+    }
+    if (placeholder === "Provide title...") editor?.commands.focus();
+  }, [content, editor, placeholder]);
+
   return (
     !!editor && (
       <div>

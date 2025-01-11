@@ -2,9 +2,8 @@ import { Button } from "@/components/button";
 import { DatePicker } from "@/components/date-picker";
 import { RichEditor } from "@/components/editor/rich-editor";
 import { Separator } from "@/components/separator";
-import { Hash, Plus, Trash2, X } from "lucide-react";
+import { Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { PrioritySelect } from "./priority-select";
 import {
   Dialog,
@@ -14,15 +13,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/dialog";
-import { TaskProps } from "./project-tasks";
 import { useDeleteTask } from "../hooks/use-delete-task";
 import { useUpdateTask } from "../hooks/use-update-task";
 import { TaskCheck } from "./task-check";
+import { Task } from "@/types/schemas";
 
 type UpdateTaskModalProps = {
   open: boolean;
   onOpenChange: (arg: boolean) => void;
-} & TaskProps;
+  param: string;
+} & Task;
 
 export function UpdateTaskModal({
   open,
@@ -32,16 +32,17 @@ export function UpdateTaskModal({
   description,
   date,
   priority,
-  projectId,
-  projectName,
   isDone,
+  param,
 }: UpdateTaskModalProps) {
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDescription, setUpdatedDescription] = useState(description);
-  const [controlledDate, setControlledDate] = useState<Date | undefined>(date);
+  const [controlledDate, setControlledDate] = useState<Date | undefined>(
+    date ? new Date(date) : undefined
+  );
   const [updatedPriority, setUpdatedPriority] = useState(priority);
-  const { mutate } = useDeleteTask(projectId);
-  const { handleUpdate } = useUpdateTask(projectId);
+  const { mutate } = useDeleteTask(param);
+  const { handleUpdate, handleDone } = useUpdateTask(param);
   const deleteTask = () => {
     onOpenChange(false);
     mutate(id);
@@ -59,28 +60,10 @@ export function UpdateTaskModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        onInteractOutside={() => {
-          setUpdatedPriority(priority);
-          setControlledDate(date);
-        }}
         className="gap-0 items-center p-0 md:max-w-3xl w-full"
         customClose
       >
         <DialogHeader className="flex items-center flex-row py-2 pr-3 pl-2">
-          <Button
-            className="text-foreground/80"
-            asChild
-            variant="ghost"
-            size="sm"
-          >
-            <Link
-              onClick={() => onOpenChange(false)}
-              to={`/app/projects/${projectId}`}
-            >
-              <Hash />
-              <span>{projectName}</span>
-            </Link>
-          </Button>
           <div className="flex w-full justify-end gap-2">
             <Button variant="ghost" size="xs" onClick={deleteTask}>
               <Trash2 />
@@ -98,7 +81,7 @@ export function UpdateTaskModal({
             <div className="flex gap-2 items-start">
               <TaskCheck
                 priority={priority}
-                onClick={deleteTask}
+                onClick={() => handleDone(id, !isDone)}
                 isDone={isDone}
               />
               <div className="flex flex-col gap-1 mb-2">

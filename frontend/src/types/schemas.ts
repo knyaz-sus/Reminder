@@ -24,11 +24,11 @@ export const taskSchema = z.object({
   description: z.string().optional().nullable(),
   date: z.string().nullable(),
   isDone: z.boolean(),
-  projectId: z.string().uuid(),
+  projectId: z.string().uuid().nullable(),
   updatedAt: z.string(),
   priority: z.enum(["1", "2", "3", "4"]),
   createdAt: z.string(),
-  order: z.number().int(),
+  order: z.number().int().nullable(),
 });
 export const tasksSchema = z.array(taskSchema);
 
@@ -61,12 +61,12 @@ export const updateProjectRequestSchema = z.object({
 
 export const createTaskRequestSchema = z.object({
   title: z.string(),
-  projectId: z.string().uuid(),
+  projectId: z.string().uuid().nullable(),
   description: z.string().optional().nullable().optional(),
   date: z.string().nullable().optional(),
   updatedAt: z.string().optional(),
   priority: z.enum(["1", "2", "3", "4"]).optional(),
-  order: z.number().int(),
+  order: z.number().int().nullable(),
 });
 
 export const updateTaskRequestSchema = z.object({
@@ -75,7 +75,7 @@ export const updateTaskRequestSchema = z.object({
   description: z.string().optional().nullable().optional(),
   date: z.string().nullable().optional(),
   isDone: z.boolean().optional(),
-  projectId: z.string().uuid().optional(),
+  projectId: z.string().uuid().optional().nullable(),
   updatedAt: z.string().optional(),
   priority: z.enum(["1", "2", "3", "4"]).optional(),
 });

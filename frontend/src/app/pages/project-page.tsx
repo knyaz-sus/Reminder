@@ -1,21 +1,54 @@
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useLocation, useParams } from "react-router-dom";
-import { ProjectTasks } from "@/modules/task/components/project-tasks";
+import { useParams } from "react-router-dom";
 import { projectApi } from "@/modules/project/project-api";
+import { useQueryProjectTasks } from "@/modules/task/hooks/use-query-project-tasks";
+import { useTaskSensors } from "@/modules/task/hooks/use-task-sensors";
+import { useUpdateTaskOrder } from "@/modules/task/hooks/use-update-task-order";
+import { closestCorners, DndContext, DragEndEvent } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CreateTask } from "@/modules/task/components/create-task";
+import { useCreateTask } from "@/modules/task/hooks/use-create-task";
+import { ProjectTask } from "@/modules/task/components/project-task";
 
 export function ProjectPage() {
   const { id } = useParams();
 
-  const [isCreating, setIsCreating] = useState(false);
-  const location = useLocation();
-  useEffect(() => setIsCreating(false), [location]);
+  const sensors = useTaskSensors();
+  const { handleUpdateOrder } = useUpdateTaskOrder(id as string);
 
   const { data: project, isError: isProjectError } = useQuery({
     ...projectApi.getProjectQueryOptions(id),
   });
-  const toggleCreating = () => setIsCreating((prev) => !prev);
 
+  const { tasks, setTasks } = useQueryProjectTasks(id as string);
+
+  const { handleCreate } = useCreateTask(id as string);
+
+  if (!tasks) return <div>Loading...</div>;
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+    if (!over) return;
+
+    if (active.id !== over.id) {
+      const oldIndex = tasks.findIndex((task) => task.id === active.id);
+      const newIndex = tasks.findIndex((task) => task.id === over.id);
+
+      const updatedTasks = arrayMove(tasks, oldIndex, newIndex).map(
+        (task, i) => {
+          task.order = i + 1;
+          return task;
+        }
+      );
+
+      setTasks(updatedTasks);
+      handleUpdateOrder(updatedTasks);
+    }
+  };
   if (isProjectError) {
     return (
       <div className="flex flex-col gap-2 items-center justify-center">
@@ -25,14 +58,26 @@ export function ProjectPage() {
   }
 
   return (
-    <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">
-      <h1 className="mb-4">{project?.name}</h1>
-      <ProjectTasks
-        param={id as string}
-        projectName={project?.name}
-        isCreating={isCreating}
-        toggleCreating={toggleCreating}
-      />
-    </div>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
+        <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">
+          <h1 className="mb-4">{project?.name}</h1>
+          <div className="flex flex-col">
+            {tasks.map((task) => (
+              <ProjectTask key={task.id} {...task} />
+            ))}
+            <CreateTask
+              projectId={id as string}
+              createTask={handleCreate}
+              order={tasks.length + 1}
+            />
+          </div>
+        </div>
+      </SortableContext>
+    </DndContext>
   );
 }

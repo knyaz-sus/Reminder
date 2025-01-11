@@ -4,34 +4,34 @@ import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { UpdateTaskModal } from "./update-task-dialog";
 import { TaskCheck } from "./task-check";
-import { TaskProps } from "./project-tasks";
 import { useUpdateTask } from "../hooks/use-update-task";
 import { formatTaskDate } from "../utils/format-task-date";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Task as TaskType } from "@/types/schemas";
 
-export function Task(props: TaskProps) {
+export function ProjectTask(props: TaskType) {
   const [open, setOpen] = useState(false);
-  const { handleDone } = useUpdateTask(props.projectId);
+  const { handleDone } = useUpdateTask(props.projectId as string);
   const toggleDone = () => handleDone(props.id, !props.isDone);
-
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: props.id,
     });
+
   const style = {
     transform: CSS.Translate.toString(transform),
     transition,
   };
   return (
-    <div className="flex flex-col gap-2 mb-2 bg-background touch-none">
-      <div
-        className="flex cursor-pointer group flex-col"
-        {...attributes}
-        {...listeners}
-        ref={setNodeRef}
-        style={style}
-      >
+    <div
+      {...attributes}
+      {...listeners}
+      ref={setNodeRef}
+      style={style}
+      className="flex flex-col gap-2 mb-2 bg-background touch-none"
+    >
+      <div className="flex cursor-pointer group flex-col">
         <div className="flex items-start w-full py-1 gap-2">
           <TaskCheck
             className="mt-[2px]"
@@ -60,7 +60,12 @@ export function Task(props: TaskProps) {
         </div>
       </div>
       <Separator />
-      <UpdateTaskModal open={open} onOpenChange={setOpen} {...props} />
+      <UpdateTaskModal
+        open={open}
+        onOpenChange={setOpen}
+        param={props.projectId as string}
+        {...props}
+      />
     </div>
   );
 }

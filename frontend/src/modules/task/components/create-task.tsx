@@ -1,40 +1,55 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import { Button } from "@/components/button";
 import { DatePicker } from "@/components/date-picker";
 import { Separator } from "@/components/separator";
 import { RichEditor } from "@/components/editor/rich-editor";
 import { PrioritySelect } from "./priority-select";
 import { Priorities } from "@/constants/ui";
-import { useCreateTask } from "../hooks/use-create-task";
+import { Plus } from "lucide-react";
+import { useCreateState } from "../hooks/use-create-state";
+import { CreateTaskRequestSchema } from "@/types/schemas";
 
 interface CreateTaskProps {
-  toggleCreating: () => void;
-  order: number;
+  projectId: string | null;
+  order: number | null;
+  createTask: (newTask: CreateTaskRequestSchema) => void;
+  defaultDate?: Date;
 }
 
-export function CreateTask({ toggleCreating, order }: CreateTaskProps) {
-  const { id } = useParams();
+export function CreateTask({
+  projectId,
+  order,
+  createTask,
+  defaultDate = undefined,
+}: CreateTaskProps) {
   const [title, setTitle] = useState("<p></p>");
   const [description, setDescription] = useState("<p></p>");
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [date, setDate] = useState<Date | undefined>(defaultDate);
   const [priority, setPriority] = useState<Priorities>("4");
-  const { handleCreate } = useCreateTask(id);
-  if (!id) {
-    throw new Error("Can't use CreateTask component outside of project page");
-  }
-  const addTask = () => {
-    handleCreate({
+
+  const { isCreating, toggleCreating } = useCreateState();
+  const resetInputs = () => {
+    setTitle("<p></p>");
+    setDescription("<p></p>");
+    setDate(undefined);
+    setPriority("4");
+  };
+  const cancelCreate = () => {
+    toggleCreating();
+    resetInputs();
+  };
+  const handleCreate = () => {
+    createTask({
       title,
-      projectId: id,
       description,
       date: date?.toISOString(),
       priority,
+      projectId,
       order,
     });
-    toggleCreating();
+    resetInputs();
   };
-  return (
+  return isCreating ? (
     <div
       className="flex flex-col justify-center px-3 pt-3
                  border-border border rounded-md"
@@ -43,7 +58,7 @@ export function CreateTask({ toggleCreating, order }: CreateTaskProps) {
         <RichEditor
           content={title}
           handleSave={setTitle}
-          autofocus
+          autofocus="end"
           placeholder="Provide title..."
         />
         <RichEditor
@@ -69,7 +84,7 @@ export function CreateTask({ toggleCreating, order }: CreateTaskProps) {
             Cancel
           </Button>
           <Button
-            onClick={addTask}
+            onClick={handleCreate}
             disabled={title === "<p></p>"}
             className="text-xs"
             size="sm"
@@ -79,5 +94,18 @@ export function CreateTask({ toggleCreating, order }: CreateTaskProps) {
         </div>
       </div>
     </div>
+  ) : (
+    <>
+      {order === 1 && <Separator />}
+      <Button
+        onClick={cancelCreate}
+        className="justify-start pl-0 text-foreground/60 hover:bg-inherit hover:text-foreground"
+        size="sm"
+        variant="ghost"
+      >
+        <Plus />
+        <span>Add task</span>
+      </Button>
+    </>
   );
 }
