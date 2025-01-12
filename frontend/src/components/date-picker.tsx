@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { Button } from "@/components/button";
 import { Calendar } from "@/components/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/popover";
+import { formatTaskDate } from "@/modules/task/utils/format-task-date";
 
 export function DatePicker({
   controlledDate,
@@ -13,13 +13,25 @@ export function DatePicker({
   controlledDate?: Date;
   setControlledDate?: (date: Date | undefined) => void;
 }) {
-  const [date, setDate] = useState<Date>();
+  const [localDate, setLocalDate] = useState<Date | undefined>(undefined); // Локальное состояние
   const [isOpen, setIsOpen] = useState(false);
+
+  const date = controlledDate ?? localDate;
+
+  const handleDateChange = (day: Date | undefined) => {
+    if (setControlledDate) {
+      setControlledDate(day);
+    } else {
+      setLocalDate(day);
+    }
+    setIsOpen(false);
+  };
+
   const getDayString = () => {
-    if (controlledDate) return format(controlledDate, "PPP");
-    else if (date) format(date, "PPP");
+    if (date) return formatTaskDate(date);
     return "Pick a date";
   };
+
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
@@ -28,7 +40,7 @@ export function DatePicker({
           size="sm"
           className={cn(
             "text-xs justify-start text-left font-normal",
-            !controlledDate && !date && "text-muted-foreground"
+            !date && "text-muted-foreground"
           )}
         >
           <CalendarIcon />
@@ -38,12 +50,8 @@ export function DatePicker({
       <PopoverContent side="right" alignOffset={5} className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={controlledDate ? controlledDate : date}
-          onSelect={(day) => {
-            setIsOpen(false);
-            if (setControlledDate) setControlledDate(day);
-            else setDate(day);
-          }}
+          selected={date}
+          onSelect={handleDateChange}
           initialFocus
         />
       </PopoverContent>

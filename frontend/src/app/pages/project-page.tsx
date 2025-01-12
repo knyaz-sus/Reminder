@@ -12,7 +12,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CreateTask } from "@/modules/task/components/create-task";
 import { useCreateTask } from "@/modules/task/hooks/use-create-task";
-import { ProjectTask } from "@/modules/task/components/project-task";
+import { Task } from "@/modules/task/components/task";
 
 export function ProjectPage() {
   const { id } = useParams();
@@ -68,7 +68,12 @@ export function ProjectPage() {
           <h1 className="mb-4">{project?.name}</h1>
           <div className="flex flex-col">
             {tasks.map((task) => (
-              <ProjectTask key={task.id} {...task} />
+              <Task
+                isSortable
+                param={task.projectId as string}
+                key={task.id}
+                {...task}
+              />
             ))}
             <CreateTask
               projectId={id as string}

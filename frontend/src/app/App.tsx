@@ -8,8 +8,6 @@ import { SignInForm } from "@/modules/auth/components/sign-in-form";
 import { SignUpForm } from "@/modules/auth/components/sign-up-form";
 import { ErrorPage } from "./pages/error-page";
 import { InboxPage } from "./pages/inbox-page";
-import { UpcomingPage } from "./pages/upcoming-page";
-import { DonePage } from "./pages/done-page";
 import { ProjectPage } from "./pages/project-page";
 
 export function App() {
@@ -38,9 +36,7 @@ export function App() {
         }
       >
         <Route index element={<Navigate to="today" replace />} />
-        <Route path="/app/done" element={<DonePage />} />
         <Route path="/app/inbox" element={<InboxPage />} />
-        <Route path="/app/upcoming" element={<UpcomingPage />} />
         <Route path="/app/today" element={<TodayPage />} />
         <Route path="/app/projects/:id" element={<ProjectPage />} />
         <Route path="/app/*" element={<Navigate to="today" replace />} />

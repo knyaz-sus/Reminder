@@ -37,10 +37,41 @@ export const getTasks = async (req: Request, res: Response) => {
       query: { projectId },
     } = await zParse(getTasksRequestSchema, req);
 
-    const { data: tasks, error } =
-      projectId === null
-        ? await supabase.from("tasks").select("*").is("projectId", projectId)
-        : await supabase.from("tasks").select("*").eq("projectId", projectId);
+    const { data: tasks, error } = await (() => {
+      if (projectId === "inbox") {
+        return supabase.from("tasks").select("*").is("projectId", null);
+      }
+
+      if (projectId === "today") {
+        const now = new Date();
+        const startOfDay = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          0,
+          0,
+          0,
+          0
+        ).toISOString();
+        const endOfDay = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          23,
+          59,
+          59,
+          999
+        ).toISOString();
+
+        return supabase
+          .from("tasks")
+          .select("*")
+          .gte("date", startOfDay)
+          .lte("date", endOfDay);
+      }
+      return supabase.from("tasks").select("*").eq("projectId", projectId);
+    })();
+
     if (error) {
       console.log(error.message);
       return res.status(500).json({

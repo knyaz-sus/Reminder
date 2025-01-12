@@ -7,7 +7,7 @@ import {
   createTaskRequestSchema,
 } from "@/types/schemas";
 
-export const useCreateTask = (projectId: string | undefined) => {
+export const useCreateTask = (projectId: string) => {
   const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
     mutationFn: taskApi.addTask,

@@ -8,19 +8,17 @@ import {
 } from "@/types/schemas";
 import { getWithValidation } from "@/api/get-with-validation";
 import { queryOptions } from "@tanstack/react-query";
-import { z } from "zod";
 import { axiosInstance } from "@/lib/axios";
 import { AxiosResponse } from "axios";
 
 export const taskApi = {
   baseKey: ["tasks"],
 
-  getProjectTasksQueryOptions(queryKey: string | undefined) {
+  getProjectTasksQueryOptions(param: string) {
     return queryOptions({
-      queryKey: ["tasks", queryKey],
+      queryKey: ["tasks", param],
       queryFn: () => {
-        z.string().uuid().parse(queryKey);
-        return getWithValidation(`/tasks/?projectId=${queryKey}`, tasksSchema);
+        return getWithValidation(`/tasks/?projectId=${param}`, tasksSchema);
       },
     });
   },

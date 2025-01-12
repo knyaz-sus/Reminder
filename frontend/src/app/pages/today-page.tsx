@@ -1,9 +1,35 @@
+import { CreateTask } from "@/modules/task/components/create-task";
+import { Task } from "@/modules/task/components/task";
+import { useCreateTask } from "@/modules/task/hooks/use-create-task";
+import { useQueryPageTasks } from "@/modules/task/hooks/use-query-page-tasks";
+import { startOfDay } from "date-fns";
+import { useMemo } from "react";
+
 export function TodayPage() {
+  const { handleCreate } = useCreateTask("today");
+
+  const { tasks, isPending, error } = useQueryPageTasks("today");
+
+  const defaultDate = useMemo(() => startOfDay(new Date()), []);
+
+  if (isPending) return <div>Loading...</div>;
+
+  if (error) return <div>Error</div>;
+  console.log("defaultDate", defaultDate);
   return (
-    <div>
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugiat iure
-      perspiciatis libero exercitationem veniam aut odio optio, quas obcaecati
-      id.
+    <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">
+      <h1 className="mb-4">Today</h1>
+      <div className="flex flex-col">
+        {tasks?.map((task) => (
+          <Task param="today" isSortable={false} key={task.id} {...task} />
+        ))}
+        <CreateTask
+          projectId={null}
+          createTask={handleCreate}
+          order={null}
+          defaultDate={defaultDate}
+        />
+      </div>
     </div>
   );
 }

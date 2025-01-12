@@ -10,13 +10,14 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Task as TaskType } from "@/types/schemas";
 
-export function ProjectTask(props: TaskType) {
+export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
-  const { handleDone } = useUpdateTask(props.projectId as string);
+  const { handleDone } = useUpdateTask(props.param);
   const toggleDone = () => handleDone(props.id, !props.isDone);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: props.id,
+      disabled: props.isSortable,
     });
 
   const style = {
@@ -60,12 +61,7 @@ export function ProjectTask(props: TaskType) {
         </div>
       </div>
       <Separator />
-      <UpdateTaskModal
-        open={open}
-        onOpenChange={setOpen}
-        param={props.projectId as string}
-        {...props}
-      />
+      <UpdateTaskModal open={open} onOpenChange={setOpen} {...props} />
     </div>
   );
 }

@@ -20,18 +20,18 @@ export function CreateTask({
   projectId,
   order,
   createTask,
-  defaultDate = undefined,
+  defaultDate,
 }: CreateTaskProps) {
   const [title, setTitle] = useState("<p></p>");
   const [description, setDescription] = useState("<p></p>");
   const [date, setDate] = useState<Date | undefined>(defaultDate);
-  const [priority, setPriority] = useState<Priorities>("4");
 
+  const [priority, setPriority] = useState<Priorities>("4");
   const { isCreating, toggleCreating } = useCreateState();
   const resetInputs = () => {
     setTitle("<p></p>");
     setDescription("<p></p>");
-    setDate(undefined);
+    setDate(defaultDate);
     setPriority("4");
   };
   const cancelCreate = () => {
@@ -76,7 +76,7 @@ export function CreateTask({
         </div>
         <div className="flex items-center gap-2">
           <Button
-            onClick={toggleCreating}
+            onClick={cancelCreate}
             className="text-xs"
             size="sm"
             variant="secondary"
@@ -98,7 +98,7 @@ export function CreateTask({
     <>
       {order === 1 && <Separator />}
       <Button
-        onClick={cancelCreate}
+        onClick={toggleCreating}
         className="justify-start pl-0 text-foreground/60 hover:bg-inherit hover:text-foreground"
         size="sm"
         variant="ghost"

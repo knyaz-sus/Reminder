@@ -68,7 +68,10 @@ export const addTaskRequestSchema = z.object({
 
 export const getTasksRequestSchema = z.object({
   query: z.object({
-    projectId: z.string().uuid().nullable(),
+    projectId: z
+      .string()
+      .uuid()
+      .or(z.enum(["inbox", "today"])),
   }),
 });
 
